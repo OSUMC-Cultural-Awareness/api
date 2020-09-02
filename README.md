@@ -6,7 +6,7 @@
   <h3 align="center">OSUMC Cultural Awareness App</h3>
 
   <p align="center">
-    This app is intended to for health care professionals, to aid in their understanding of cultural norms of their patients
+    This app is intended for health care professionals, to aid in their understanding of the cultural norms of their patients
   </p>
 </p>
 
