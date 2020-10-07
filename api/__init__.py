@@ -6,7 +6,8 @@ Routes Specified:
 """
 from typing import Any, List, Dict
 from flask import request, Flask
-from ../ import db_connection
+from .. import db_connection
+
 db = db_connection.connect()
 
 
@@ -241,8 +242,7 @@ def create_app() -> Flask:
         """
         body = request.get_json()
         return {
-            "message":
-            f"successfully created user {body['name']} <{body['email']}>"
+            "message": f"successfully created user {body['name']} <{body['email']}>"
         }
 
     @app.route("/v1/admins")
