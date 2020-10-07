@@ -1,0 +1,7 @@
+.env
+.DS_Store
+settings.json
+backend/.envrc
+backend/.env
+backend/mongo-volume
+backend/mongo-root-user.js
