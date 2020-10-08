@@ -9,6 +9,26 @@ from flask import request, Flask
 from .. import db_connection
 
 db = db_connection.connect()
+def error_handlers(app: Flask) -> None:
+    """
+    Define common Flask error handlers
+    """
+
+    @app.errorhandler(400)
+    def malformed_request(error):
+        return {"message": "malformed request"}, 400
+
+    @app.errorhandler(401)
+    def unauthorized(error):
+        return {"message": "unauthorized"}, 401
+
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        return {"message": "internal server error"}, 500
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return {"message": "resource not found"}
 
 
 def create_app() -> Flask:
