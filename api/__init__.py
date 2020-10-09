@@ -8,8 +8,6 @@ from typing import Any, List, Dict, Tuple
 
 from flask import request, Flask, abort
 
-from . import db_connection
-
 
 def error_handlers(app: Flask) -> None:
     """
