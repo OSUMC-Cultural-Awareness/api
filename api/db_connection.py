@@ -32,7 +32,8 @@ def connect():
             host=[DOMAIN + ":" + PORT],
             serverSelectionTimeoutMS=5000,  # 3 second timeout
             username=MONGO_INITDB_ROOT_USERNAME,
-            password=MONGO_INITDB_ROOT_PASSWORD)
+            password=MONGO_INITDB_ROOT_PASSWORD,
+        )
 
         # print the version of MongoDB server if connection successful
         print("server version:", client.server_info()["version"])

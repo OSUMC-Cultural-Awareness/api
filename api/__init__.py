@@ -33,7 +33,7 @@ def error_handlers(app: Flask) -> None:
         return {"message": "resource not found"}
 
 
-def create_app() -> Flask:
+def create_app(db) -> Flask:
     """
     Construct Flask App with all Endpoints
 
@@ -42,7 +42,6 @@ def create_app() -> Flask:
       Flask app
     """
     app = Flask(__name__)
-    db = db_connection.connect()
 
     error_handlers(app)
 
@@ -435,7 +434,7 @@ def create_app() -> Flask:
 
         collection = db.admins
         result = collection.replace_one({"email": email}, body)
-        if result.matched_count == 0 or result.modified == 0:
+        if result.matched_count == 0 or result.modified_count == 0:
             abort(500)
 
         return {"message": f"successfully updated admin <{email}>"}, 200
@@ -460,6 +459,6 @@ def create_app() -> Flask:
         result = collection.delete_one({"email": email})
         if result.deleted_count == 0:
             abort(500)
-        return {"message": "successfully deleted admin <{email}>"}
+        return {"message": f"successfully deleted admin <{email}>"}
 
     return app
