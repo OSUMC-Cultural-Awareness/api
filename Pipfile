@@ -10,6 +10,7 @@ mongomock = "*"
 [packages]
 flask = "*"
 pymongo = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.8"
