@@ -1,7 +1,9 @@
 version: "3"
 services:
   api:
-    build: ./api/.
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     ports:
       - "5000:5000"
     volumes:
@@ -21,7 +23,6 @@ services:
     volumes:
       - ./mongo-root-user.js:/docker-entrypoint-initdb.d/mongo-root-user.js:ro
       - ./mongo-volume:/data/db
-      - ./:/appdata
     ports:
       - "27017:27017"
     networks:
