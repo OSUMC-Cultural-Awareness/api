@@ -24,5 +24,3 @@ instance/
 .coverage
 htmlcov/
 .mypy_cache/
-
-capstone.code-workspace
