@@ -1,10 +1,11 @@
 import os
 import sys
 
-sys.path.insert(0, "/appdata")
+from api.db_connection import connect
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
-from api.db_connection import connect
+
+sys.path.insert(0, "/appdata")
 
 # general functions
 def list_collections():
