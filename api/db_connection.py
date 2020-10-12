@@ -13,7 +13,7 @@ MONGO_INITDB_ROOT_PASSWORD = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
 def connect():
     """
     establishes a connection to the database
-    
+
     ENV variables:
         DOMAIN - container IP address of the mongodb container
         PORT - port expose on the mongodb container

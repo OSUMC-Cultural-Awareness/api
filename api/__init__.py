@@ -344,9 +344,12 @@ def create_app(db) -> Flask:
         if not result.acknowledged:
             abort(500)
 
-        return {
-            "message": f"successfully created admin {body['username']} <{body['email']}>"
-        }, 200
+        return (
+            {
+                "message": f"successfully created admin {body['username']} <{body['email']}>"
+            },
+            200,
+        )
 
     @app.route("/v1/admins")
     def admins() -> Dict[str, List[str]]:
