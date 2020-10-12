@@ -6,6 +6,10 @@ verify_ssl = true
 [dev-packages]
 pytest = "*"
 mongomock = "*"
+black = "*"
+pylint = "*"
+mypy = "*"
+isort = "*"
 
 [packages]
 flask = "*"
