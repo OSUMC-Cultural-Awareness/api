@@ -4,9 +4,9 @@ Flask API for interacting with OSUMC-Cultural Awareness App
 Routes Specified:
   https://docs.google.com/spreadsheets/d/19zLqvcoFI7Jm_y6nPPgcRmaBuPEkDKtgeiyozekbMoU/edit?usp=sharing
 """
-from typing import Any, List, Dict, Tuple
+from typing import Any, Dict, List, Tuple
 
-from flask import request, Flask, abort
+from flask import Flask, abort, request
 
 
 def error_handlers(app: Flask) -> None:
@@ -297,7 +297,7 @@ def create_app(db) -> Flask:
         return {"message": f"deleted {culture_group}"}
 
     @app.route("/v1/register", methods=["POST"])
-    def register() -> Dict[str, str]:
+    def register() -> Tuple[Dict[str, str], int]:
         """
         Register a new administrator
 
@@ -344,12 +344,15 @@ def create_app(db) -> Flask:
         if not result.acknowledged:
             abort(500)
 
-        return {
-            "message": f"successfully created admin {body['username']} <{body['email']}>"
-        }
+        return (
+            {
+                "message": f"successfully created admin {body['username']} <{body['email']}>"
+            },
+            200,
+        )
 
     @app.route("/v1/admins")
-    def admins() -> List[Any]:
+    def admins() -> Dict[str, List[str]]:
         """
         List all admins
 
