@@ -187,7 +187,6 @@ def create_app(db) -> Flask:
         if admin is None:
             abort(401)
 
-        print(admin)
         # Authenticate user
 
         return {"message": "Authenticated"}
@@ -347,7 +346,7 @@ def create_app(db) -> Flask:
 
         return (
             {
-                "message": f"successfully created admin {body['username']} <{body['email']}>"
+                "message": f"successfully created admin {body['name']} <{body['email']}>"
             },
             200,
         )
