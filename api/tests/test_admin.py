@@ -5,7 +5,7 @@ def test_list_admins(client):
     res = client.post(
         "/v1/register",
         json={
-            "username": "tester",
+            "name": "tester",
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
@@ -21,7 +21,7 @@ def test_login(client):
     res = client.post(
         "/v1/register",
         json={
-            "username": "tester",
+            "name": "tester",
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
@@ -39,7 +39,7 @@ def test_create_admin(client):
     res = client.post(
         "/v1/register",
         json={
-            "username": "tester",
+            "name": "tester",
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
@@ -55,7 +55,7 @@ def test_delete_admin(client):
     res = client.post(
         "/v1/register",
         json={
-            "username": "tester",
+            "name": "tester",
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
@@ -72,7 +72,7 @@ def test_update_admin(client):
     res = client.post(
         "/v1/register",
         json={
-            "username": "tester",
+            "name": "tester",
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
@@ -83,7 +83,7 @@ def test_update_admin(client):
     res = client.put(
         "/v1/admin/tester@gmail.com",
         json={
-            "username": "tester-different-name",
+            "name": "tester-different-name",
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
