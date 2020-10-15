@@ -306,7 +306,7 @@ def create_app(db) -> Flask:
           POST Body:
 
           {
-            "username": "name",
+            "name": "name",
             "email": "email",
             "password": "password",
             "password_confirmation": "password",
@@ -346,7 +346,7 @@ def create_app(db) -> Flask:
 
         return (
             {
-                "message": f"successfully created admin {body['username']} <{body['email']}>"
+                "message": f"successfully created admin {body['name']} <{body['email']}>"
             },
             200,
         )
@@ -366,7 +366,7 @@ def create_app(db) -> Flask:
           500 - otherwise
         """
         collection = db.admins
-        admins = [admin["username"] for admin in collection.find().sort("username")]
+        admins = [admin["name"] for admin in collection.find().sort("name")]
         return {"admins": admins}
 
     @app.route("/v1/admin/invite", methods=["POST"])
