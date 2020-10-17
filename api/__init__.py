@@ -8,6 +8,7 @@ from typing import Any, Dict, List, Tuple
 
 from flask import Flask, abort, request
 
+from .email_template import send_admin_invite_email
 
 def error_handlers(app: Flask) -> None:
     """
@@ -392,6 +393,7 @@ def create_app(db) -> Flask:
             500 - otherwise
         """
         body = request.get_json()
+        send_admin_invite_email(f"{body['email']}")
         return {"message": f"email sent to {body['email']}"}
 
     @app.route("/v1/admin/<email>", methods=["PUT"])
