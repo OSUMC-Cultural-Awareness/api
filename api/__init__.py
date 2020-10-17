@@ -8,6 +8,7 @@ import os
 from typing import Any, Dict, List, Tuple
 from flask import Flask, abort, request
 from flask_mail import Mail, Message
+# type: ignore
 
 MAIL_USERNAME = os.getenv("GMAIL_ADDRESS")
 MAIL_PASSWORD = os.getenv("GMAIL_PASSWORD")
