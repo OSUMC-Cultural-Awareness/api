@@ -4,9 +4,13 @@ Flask API for interacting with OSUMC-Cultural Awareness App
 Routes Specified:
   https://docs.google.com/spreadsheets/d/19zLqvcoFI7Jm_y6nPPgcRmaBuPEkDKtgeiyozekbMoU/edit?usp=sharing
 """
+import os
 from typing import Any, Dict, List, Tuple
-
 from flask import Flask, abort, request
+from flask_mail import Mail, Message # type: ignore
+
+MAIL_USERNAME = os.getenv("GMAIL_ADDRESS")
+MAIL_PASSWORD = os.getenv("GMAIL_PASSWORD")
 
 
 def error_handlers(app: Flask) -> None:
@@ -40,6 +44,15 @@ def create_app(db) -> Flask:
       Flask app
     """
     app = Flask(__name__)
+    app.config.update(
+        # EMAIL SETTINGS
+        MAIL_SERVER="smtp.gmail.com",
+        MAIL_PORT=465,
+        MAIL_USE_SSL=True,
+        MAIL_USERNAME=MAIL_USERNAME,
+        MAIL_PASSWORD=MAIL_PASSWORD,
+    )
+    mail = Mail(app)
 
     error_handlers(app)
 
@@ -391,7 +404,22 @@ def create_app(db) -> Flask:
             401 - bad auth token
             500 - otherwise
         """
+
         body = request.get_json()
+        msg = Message(
+            "Account Activation",
+            sender="osumc.cultural.awareness@gmail.com",
+            recipients=[f"{body['email']}"],
+        )
+        msg.html = """\
+          <!DOCTYPE html>
+          <html>
+            <body>
+              <h1 style="color:SlateGray;">This is an HTML Email!</h1>
+            </body>
+          </html>	
+          """
+        mail.send(msg)
         return {"message": f"email sent to {body['email']}"}
 
     @app.route("/v1/admin/<email>", methods=["PUT"])
