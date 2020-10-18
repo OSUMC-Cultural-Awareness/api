@@ -21,7 +21,6 @@ services:
       - .env
 
     volumes:
-      - ./mongo-root-user.js:/docker-entrypoint-initdb.d/mongo-root-user.js:ro
       - ./mongo-volume:/data/db
       - ./:/appdata
     ports:
