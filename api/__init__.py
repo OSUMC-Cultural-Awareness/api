@@ -7,7 +7,7 @@ Routes Specified:
 import os
 from typing import Any, Dict, List, Tuple
 from flask import Flask, abort, request
-from flask_mail import Mail, Message # type: ignore
+from flask_mail import Mail, Message  # type: ignore
 
 MAIL_USERNAME = os.getenv("GMAIL_ADDRESS")
 MAIL_PASSWORD = os.getenv("GMAIL_PASSWORD")
@@ -90,8 +90,8 @@ def create_app(db) -> Flask:
     def health():
         return {"message": "healthy"}
 
-    @app.route("/v1/culture_groups")
-    def culture_groups() -> Dict[str, List[str]]:
+    @app.route("/v1/culture")
+    def cultures() -> Dict[str, List[str]]:
         """
         Fetch a list of all culture groups in alphabetical order
 
@@ -108,8 +108,8 @@ def create_app(db) -> Flask:
         cultures = [culture["name"] for culture in collection.find().sort("name")]
         return {"cultures": cultures}
 
-    @app.route("/v1/<group_name>")
-    def culture_snapshot(group_name: str) -> Dict[str, Any]:
+    @app.route("/v1/culture/<name>")
+    def culture_snapshot(name: str) -> Dict[str, Any]:
         """
         Fetch a snapshot of information about a specific Culture Group
 
@@ -122,7 +122,7 @@ def create_app(db) -> Flask:
           500 - otherwise
         """
         collection = db.cultures
-        culture = collection.find_one({"name": group_name})
+        culture = collection.find_one({"name": name})
         if culture is None:
             abort(500)
 
@@ -130,8 +130,8 @@ def create_app(db) -> Flask:
         culture["_id"] = str(culture["_id"])
         return culture
 
-    @app.route("/v1/<group_name>/all")
-    def culture_detailed(group_name: str) -> Dict[str, Any]:
+    @app.route("/v1/culture/<name>/all")
+    def culture_detailed(name: str) -> Dict[str, Any]:
         """
         Fetch all information about a specific Culture Group
 
@@ -145,15 +145,15 @@ def create_app(db) -> Flask:
           500 - otherwise
         """
         collection = db.cultures
-        culture = collection.find_one({"name": group_name})
+        culture = collection.find_one({"name": name})
         if culture is None:
-            abort(404, message={"message": f"unknown culture `{group_name}`"})
+            abort(404, message={"message": f"unknown culture `{name}`"})
 
         culture["_id"] = str(culture["_id"])
         return culture
 
-    @app.route("/v1/<group_name>/all/download")
-    def download_culture(group_name: str) -> Any:
+    @app.route("/v1/<name>/download")
+    def download_culture(name: str) -> Any:
         """
         Fetch all information about a specific Culture Group in downloadable
         and storeable form
@@ -204,7 +204,7 @@ def create_app(db) -> Flask:
 
         return {"message": "Authenticated"}
 
-    @app.route("/v1/culture_groups", methods=["POST"])
+    @app.route("/v1/culture", methods=["POST"])
     def create_culture() -> Tuple[Dict[str, str], int]:
         """
         Create a Culture with information
@@ -247,8 +247,8 @@ def create_app(db) -> Flask:
         body["_id"] = str(body["_id"])
         return body, 200
 
-    @app.route("/v1/<culture_group>", methods=["PUT"])
-    def update_culture(culture_group: str) -> Dict[str, str]:
+    @app.route("/v1/culture/<name>", methods=["PUT"])
+    def update_culture(name: str) -> Dict[str, str]:
         """
         Update an existing Culture
 
@@ -282,14 +282,14 @@ def create_app(db) -> Flask:
         # TODO: Authorize token
 
         collection = db.cultures
-        result = collection.replace_one({"name": body["name"]}, body)
+        result = collection.replace_one({"name": name}, body)
         if result.matched_count == 0 or result.modified_count == 0:
             abort(500)
 
         return body
 
-    @app.route("/v1/<culture_group>", methods=["DELETE"])
-    def delete_culture(culture_group: str) -> Dict[str, str]:
+    @app.route("/v1/culture/<name>", methods=["DELETE"])
+    def delete_culture(name: str) -> Dict[str, str]:
         """
         Delete an existing Culture
 
@@ -303,11 +303,11 @@ def create_app(db) -> Flask:
           500 - otherwise
         """
         collection = db.cultures
-        result = collection.delete_one({"name": culture_group})
+        result = collection.delete_one({"name": name})
         if result.deleted_count == 0:
             abort(500)
 
-        return {"message": f"deleted {culture_group}"}
+        return {"message": f"deleted {name}"}
 
     @app.route("/v1/register", methods=["POST"])
     def register() -> Tuple[Dict[str, str], int]:
@@ -358,13 +358,11 @@ def create_app(db) -> Flask:
             abort(500)
 
         return (
-            {
-                "message": f"successfully created admin {body['name']} <{body['email']}>"
-            },
+            {"message": f"successfully created admin {body['name']} <{body['email']}>"},
             200,
         )
 
-    @app.route("/v1/admins")
+    @app.route("/v1/admin")
     def admins() -> Dict[str, List[str]]:
         """
         List all admins
@@ -417,7 +415,7 @@ def create_app(db) -> Flask:
             <body>
               <h1 style="color:SlateGray;">This is an HTML Email!</h1>
             </body>
-          </html>	
+          </html>
           """
         mail.send(msg)
         return {"message": f"email sent to {body['email']}"}

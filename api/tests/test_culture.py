@@ -1,11 +1,11 @@
 def test_list_cultures_empty(client):
-    response = client.get("/v1/culture_groups")
+    response = client.get("/v1/culture")
     assert response.get_json() == {"cultures": []}
 
 
 def test_list_cultures(client):
     response = client.post(
-        "v1/culture_groups",
+        "v1/culture",
         json={
             "name": "test",
             "oauth": "test",
@@ -14,13 +14,13 @@ def test_list_cultures(client):
         },
     )
 
-    response = client.get("/v1/culture_groups")
+    response = client.get("/v1/culture")
     assert response.get_json() == {"cultures": ["test"]}
 
 
 def test_delete_culture(client):
     response = client.post(
-        "v1/culture_groups",
+        "v1/culture",
         json={
             "name": "test",
             "oauth": "test",
@@ -29,16 +29,16 @@ def test_delete_culture(client):
         },
     )
 
-    response = client.get("/v1/culture_groups")
+    response = client.get("/v1/culture")
     assert response.get_json() == {"cultures": ["test"]}
 
-    response = client.delete("v1/test")
+    response = client.delete("v1/culture/test")
     assert response.status_code == 200
 
 
 def test_detailed_culture(client):
     response = client.post(
-        "v1/culture_groups",
+        "v1/culture",
         json={
             "name": "test",
             "oauth": "test",
@@ -47,14 +47,14 @@ def test_detailed_culture(client):
         },
     )
 
-    test = client.get("/v1/test/all")
+    test = client.get("/v1/culture/test/all")
 
     assert test.get_json() == response.get_json()
 
 
 def test_snapshot_culture(client):
     response = client.post(
-        "v1/culture_groups",
+        "v1/culture",
         json={
             "name": "test",
             "oauth": "test",
@@ -65,14 +65,14 @@ def test_snapshot_culture(client):
     response_json = response.get_json()
 
     del response_json["specialized_insights"]
-    test = client.get("/v1/test")
+    test = client.get("/v1/culture/test")
 
     assert test.get_json() == response.get_json()
 
 
 def test_update_culture(client):
     response = client.post(
-        "v1/culture_groups",
+        "v1/culture",
         json={
             "name": "test",
             "oauth": "test",
@@ -82,8 +82,8 @@ def test_update_culture(client):
     )
     response_json = response.get_json()
 
-    update_response = client.post(
-        "v1/culture_groups",
+    update_response = client.put(
+        "v1/culture/test",
         json={
             "name": "test",
             "oauth": "test",

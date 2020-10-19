@@ -1,5 +1,5 @@
 def test_list_admins(client):
-    res = client.get("/v1/admins")
+    res = client.get("/v1/admin")
     assert res.get_json()["admins"] == []
 
     res = client.post(
@@ -13,7 +13,7 @@ def test_list_admins(client):
         },
     )
 
-    res = client.get("/v1/admins")
+    res = client.get("/v1/admin")
     assert res.get_json()["admins"] == ["tester"]
 
 
@@ -95,5 +95,5 @@ def test_update_admin(client):
         "message": "successfully updated admin <tester@gmail.com>"
     }
 
-    res = client.get("/v1/admins")
+    res = client.get("/v1/admin")
     assert res.get_json() == {"admins": ["tester-different-name"]}
