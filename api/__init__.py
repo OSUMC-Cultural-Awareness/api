@@ -254,7 +254,7 @@ def create_app(db) -> Flask:
         return body, 201
 
     @app.route("/v1/culture/<name>", methods=["PUT"])
-    def update_culture(name: str) -> Dict[str, str]:
+    def update_culture(name: str) -> Tuple[Dict[str, str], int]:
         """
         Update an existing Culture
 
@@ -309,7 +309,7 @@ def create_app(db) -> Flask:
         if result.matched_count == 0 and result.modified_count == 0:
             abort(500)
 
-        return body
+        return body, 200
 
     @app.route("/v1/culture/<name>", methods=["DELETE"])
     def delete_culture(name: str) -> Dict[str, str]:
