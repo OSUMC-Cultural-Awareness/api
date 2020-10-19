@@ -46,8 +46,41 @@ def test_create_admin(client):
             "oauth": "test",
         },
     )
+    assert res.status_code == 201
     assert res.get_json() == {
         "message": "successfully created admin tester <tester@gmail.com>"
+    }
+
+
+def test_create_admin_duplicate(client):
+    res = client.post(
+        "/v1/register",
+        json={
+            "name": "tester",
+            "email": "tester@gmail.com",
+            "password": "password",
+            "password_confirmation": "password",
+            "oauth": "test",
+        },
+    )
+
+    assert res.status_code == 201
+
+    res1 = client.post(
+        "/v1/register",
+        json={
+            "name": "tester",
+            "email": "tester@gmail.com",
+            "password": "password",
+            "password_confirmation": "password",
+            "oauth": "test",
+        },
+    )
+
+    assert res1.status_code == 409
+
+    assert res1.get_json() == {
+        "message": "failed to create admin with email <tester@gmail.com>: duplicate"
     }
 
 

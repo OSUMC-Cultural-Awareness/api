@@ -239,13 +239,19 @@ def create_app(db) -> Flask:
         # TODO: Authorize token
 
         collection = db.cultures
+        if collection.find_one({"name": body["name"]}) is not None:
+            return (
+                {"message": f"failed to create culture {body['name']}: already exists"},
+                409,
+            )
+
         result = collection.insert_one(body)
 
         if not result.acknowledged:
             return {"message": f"failed to create culture {body['name']}"}, 500
 
         body["_id"] = str(body["_id"])
-        return body, 200
+        return body, 201
 
     @app.route("/v1/culture/<name>", methods=["PUT"])
     def update_culture(name: str) -> Dict[str, str]:
@@ -266,7 +272,21 @@ def create_app(db) -> Flask:
         Returns:
           200 - group successfully updated
 
-          {"message": "successfully updated CULTURE_GROUP"}
+          {
+            "name": "culture-name",
+            "general_insights": [],
+            "specialized_insights": [],
+            "oauth": "token"
+           }
+
+          201 - group renamed
+
+          {
+            "name": "culture-name",
+            "general_insights": [],
+            "specialized_insights": [],
+            "oauth": "token"
+           }
 
           400 - malformed POST body
           401 - bad auth token
@@ -283,7 +303,10 @@ def create_app(db) -> Flask:
 
         collection = db.cultures
         result = collection.replace_one({"name": name}, body)
-        if result.matched_count == 0 or result.modified_count == 0:
+
+        if result.matched_count == 0:
+            return body, 201
+        if result.matched_count == 0 and result.modified_count == 0:
             abort(500)
 
         return body
@@ -353,13 +376,21 @@ def create_app(db) -> Flask:
         # Encrypt password prior to storing
 
         collection = db.admins
+        if collection.find_one({"email": body["email"]}) is not None:
+            return (
+                {
+                    "message": f"failed to create admin with email <{body['email']}>: duplicate"
+                },
+                409,
+            )
+
         result = collection.insert_one(body)
         if not result.acknowledged:
             abort(500)
 
         return (
             {"message": f"successfully created admin {body['name']} <{body['email']}>"},
-            200,
+            201,
         )
 
     @app.route("/v1/admin")
@@ -458,6 +489,7 @@ def create_app(db) -> Flask:
             )
 
         del body["password_confirmation"]
+        # TODO: Authenticate user
 
         collection = db.admins
         result = collection.replace_one({"email": email}, body)

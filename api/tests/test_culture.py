@@ -18,6 +18,49 @@ def test_list_cultures(client):
     assert response.get_json() == {"cultures": ["test"]}
 
 
+def test_create_culture(client):
+    response = client.post(
+        "v1/culture",
+        json={
+            "name": "test",
+            "oauth": "test",
+            "general_insights": [],
+            "specialized_insights": [],
+        },
+    )
+
+    assert response.status_code == 201
+    assert response.get_json()["name"] == "test"
+    assert response.get_json()["general_insights"] == []
+    assert response.get_json()["specialized_insights"] == []
+
+
+def test_create_culture_duplicate(client):
+    response = client.post(
+        "v1/culture",
+        json={
+            "name": "test",
+            "oauth": "test",
+            "general_insights": [],
+            "specialized_insights": [],
+        },
+    )
+
+    assert response.status_code == 201
+
+    response = client.post(
+        "v1/culture",
+        json={
+            "name": "test",
+            "oauth": "test",
+            "general_insights": [],
+            "specialized_insights": [],
+        },
+    )
+
+    assert response.status_code == 409
+
+
 def test_delete_culture(client):
     response = client.post(
         "v1/culture",
