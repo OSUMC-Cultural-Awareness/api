@@ -18,8 +18,8 @@
   - [Built With](#built-with)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
+  - [Installation & Configuration](#Installation-&-Configuration)
+  - [Usage](#Usage)
 - [Contributors](#contributors)
 
 <!-- ABOUT THE PROJECT -->
@@ -30,45 +30,92 @@ TODO
 
 ### Built With
 
-TODO
+MongoDB  
+Python-Flask  
+Node  
+React-Native
 
 <!-- GETTING STARTED -->
 
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
+To set up a development environment follow these simple steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+install the following packages
 
-- npm
-- python
+- [Docker](https://docs.docker.com/get-docker/)
+- [python 3.8](https://www.python.org/downloads/)
+- [node](https://nodejs.org/en/download/)
+- [expo-cli](https://docs.expo.io/get-started/installation/)
 
-```sh
-npm install npm@latest -g
-```
-
-### Installation
+### Installation & Configuration
 
 1. Clone the repo
 
-```
+```sh
 git clone https://github.com/freeman91/OSUMC-Cultural-Awareness-App.git
 ```
 
-2. Install NPM packages
+2. Create .env file with the following contents. Get secrets from another dev.
 
+```sh
+FLASK_ENV=development
+FLASK_APP=api/__main__.py
+MONGO_URI=mongodb://localhost:27017/
+MONGO_INITDB_DATABASE=database
+MONGO_INITDB_ROOT_USERNAME=user
+MONGO_INITDB_ROOT_PASSWORD=password
+MONGO_IP=172.19.199.3
+MONGO_PORT=27017
+
+GMAIL_ADDRESS=osumc.cultural.awareness@gmail.com
+GMAIL_PASSWORD=password
 ```
+
+3. Install NPM packages
+
+```sh
+yarn install
+# or
 npm install
 ```
 
 <!-- USAGE EXAMPLES -->
 
-## Usage
+### Usage
 
+```sh
+# build db and api containers
+docker-compose up -d --build
+
+# restore your local db from the backup file
+script/restore_dev_db.sh
+
+# start expo service [android simulator, ios simulator, web browser]
+expo start [-a, -i, -w]
 ```
-npm start
+
+testing
+
+```sh
+pipenv shell
+
+python -m pytest
+```
+
+(optional)
+
+```sh
+# Read Logs
+docker logs $(docker ps --filter name=backend_cultural-awareness --format "{{.ID}}")
+
+# all container logs
+docker-compose logs -f --tail=100
+
+# Stop containers
+docker-compose down
 ```
 
 <!-- Contributers -->
