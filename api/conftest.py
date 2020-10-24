@@ -6,6 +6,8 @@ from flask_bcrypt import Bcrypt  # type: ignore
 
 from . import create_app
 from .auth import auth
+from .resource.admin import admin_routes
+from .resource.culture import culture_routes
 
 
 def login_admin(client):
@@ -22,12 +24,13 @@ def login_admin(client):
 @pytest.fixture
 def client():
     db = mongomock.MongoClient().db
-    app = Flask(__name__)
+    app = create_app(db)
     app.config["SECRET_KEY"] = "testing"
     bcrypt = Bcrypt(app)
 
     auth(app, db, bcrypt)
-    create_app(app, db)
+    admin_routes(app, db)
+    culture_routes(app, db)
     app.config["TESTING"] = True
 
     # Create test user
