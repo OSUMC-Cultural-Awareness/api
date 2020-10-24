@@ -1,7 +1,7 @@
 import os
 
-from pymongo import MongoClient
-from pymongo.errors import ServerSelectionTimeoutError
+from pymongo import MongoClient  # type:ignore
+from pymongo.errors import ServerSelectionTimeoutError  # type:ignore
 
 DOMAIN = os.getenv("MONGO_IP")
 PORT = os.getenv("MONGO_PORT")
@@ -10,7 +10,7 @@ MONGO_INITDB_ROOT_USERNAME = os.getenv("MONGO_INITDB_ROOT_USERNAME")
 MONGO_INITDB_ROOT_PASSWORD = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
 
 
-def connect():
+def connect() -> MongoClient:
     """
     establishes a connection to the database
 
@@ -30,7 +30,7 @@ def connect():
     try:
         # try to instantiate a client instance
         client = MongoClient(
-            host=[DOMAIN + ":" + PORT],
+            host=[DOMAIN + ":" + PORT],  # type: ignore
             serverSelectionTimeoutMS=5000,  # 3 second timeout
             username=MONGO_INITDB_ROOT_USERNAME,
             password=MONGO_INITDB_ROOT_PASSWORD,

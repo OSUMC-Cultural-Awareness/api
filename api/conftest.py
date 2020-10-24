@@ -1,5 +1,5 @@
-import mongomock
-import pytest
+import mongomock  # type: ignore
+import pytest  # type: ignore
 
 from . import create_app
 
