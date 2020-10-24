@@ -5,7 +5,7 @@ from flask import Flask
 from flask_bcrypt import Bcrypt  # type: ignore
 
 from . import create_app, db_connection
-from .auth import auth
+from .auth import auth_routes
 from .resource.admin import admin_routes
 from .resource.culture import culture_routes
 
