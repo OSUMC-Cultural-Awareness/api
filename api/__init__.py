@@ -4,13 +4,13 @@ Flask API for interacting with OSUMC-Cultural Awareness App
 Routes Specified:
   https://docs.google.com/spreadsheets/d/19zLqvcoFI7Jm_y6nPPgcRmaBuPEkDKtgeiyozekbMoU/edit?usp=sharing
 """
-import os
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Optional
+
 from flask import Flask, abort, request
 from flask_mail import Mail, Message  # type: ignore
+from flask_jwt_extended import jwt_required, get_jwt_identity  # type: ignore
 
-MAIL_USERNAME = os.getenv("GMAIL_ADDRESS")
-MAIL_PASSWORD = os.getenv("GMAIL_PASSWORD")
+from pymongo import MongoClient  # type:ignore
 
 
 def error_handlers(app: Flask) -> None:
@@ -35,7 +35,7 @@ def error_handlers(app: Flask) -> None:
         return {"message": "resource not found"}
 
 
-def create_app(db) -> Flask:
+def create_app(app: Flask, db: MongoClient) -> None:
     """
     Construct Flask App with all Endpoints
 
@@ -43,15 +43,6 @@ def create_app(db) -> Flask:
 
       Flask app
     """
-    app = Flask(__name__)
-    app.config.update(
-        # EMAIL SETTINGS
-        MAIL_SERVER="smtp.gmail.com",
-        MAIL_PORT=465,
-        MAIL_USE_SSL=True,
-        MAIL_USERNAME=MAIL_USERNAME,
-        MAIL_PASSWORD=MAIL_PASSWORD,
-    )
     mail = Mail(app)
 
     error_handlers(app)
@@ -169,42 +160,8 @@ def create_app(db) -> Flask:
         """
         pass
 
-    @app.route("/v1/login", methods=["POST"])
-    def login() -> Dict[str, str]:
-        """
-        Login a User
-
-        Parameters:
-
-          POST body:
-
-          {
-            "email": "email",
-            "password": "password"
-          }
-
-          Returns:
-            200 - Oauth token
-
-            {"Message": "Authenticated"}
-
-            400 - malformed request body
-            401 - wrong password
-            500 - otherwise
-        """
-        body = request.get_json()
-        if not body["email"] or not body["password"]:
-            abort(400)
-
-        admin = db.admins.find_one({"email": body["email"]})
-        if admin is None:
-            abort(401)
-
-        # Authenticate user
-
-        return {"message": "Authenticated"}
-
     @app.route("/v1/culture", methods=["POST"])
+    @jwt_required
     def create_culture() -> Tuple[Dict[str, str], int]:
         """
         Create a Culture with information
@@ -217,26 +174,15 @@ def create_app(db) -> Flask:
             "name": "culture-name",
             "general_insights": [],
             "specialized_insights": [],
-            "oauth": "token"
            }
 
         Returns:
           200 - group successfully added
-
-          POST Body without "oauth" field
-
           400 - malformed POST body
           401 - bad auth token
           500 - otherwise
         """
         body = request.get_json()
-
-        if not body["oauth"]:
-            abort(400)
-
-        token = body["oauth"]
-        del body["oauth"]
-        # TODO: Authorize token
 
         collection = db.cultures
         if collection.find_one({"name": body["name"]}) is not None:
@@ -254,6 +200,7 @@ def create_app(db) -> Flask:
         return body, 201
 
     @app.route("/v1/culture/<name>", methods=["PUT"])
+    @jwt_required
     def update_culture(name: str) -> Tuple[Dict[str, str], int]:
         """
         Update an existing Culture
@@ -266,7 +213,6 @@ def create_app(db) -> Flask:
             "name": "culture-name",
             "general_insights": [],
             "specialized_insights": [],
-            "oauth": "token"
            }
 
         Returns:
@@ -276,7 +222,6 @@ def create_app(db) -> Flask:
             "name": "culture-name",
             "general_insights": [],
             "specialized_insights": [],
-            "oauth": "token"
            }
 
           201 - group renamed
@@ -285,7 +230,6 @@ def create_app(db) -> Flask:
             "name": "culture-name",
             "general_insights": [],
             "specialized_insights": [],
-            "oauth": "token"
            }
 
           400 - malformed POST body
@@ -293,13 +237,6 @@ def create_app(db) -> Flask:
           500 - otherwise
         """
         body = request.get_json()
-
-        if not body["oauth"]:
-            abort(400, message="required field `oauth` not provided")
-
-        token = body["oauth"]
-        del body["oauth"]
-        # TODO: Authorize token
 
         collection = db.cultures
         result = collection.replace_one({"name": name}, body)
@@ -312,6 +249,7 @@ def create_app(db) -> Flask:
         return body, 200
 
     @app.route("/v1/culture/<name>", methods=["DELETE"])
+    @jwt_required
     def delete_culture(name: str) -> Dict[str, str]:
         """
         Delete an existing Culture
@@ -332,68 +270,8 @@ def create_app(db) -> Flask:
 
         return {"message": f"deleted {name}"}
 
-    @app.route("/v1/register", methods=["POST"])
-    def register() -> Tuple[Dict[str, str], int]:
-        """
-        Register a new administrator
-
-        Parameters:
-
-          POST Body:
-
-          {
-            "name": "name",
-            "email": "email",
-            "password": "password",
-            "password_confirmation": "password",
-            "oauth": "token"
-           }
-
-        Returns:
-          200 - New admin created
-
-          {"message": "successfully created admin NAME <EMAIL>"}
-
-          400 - Malformed body
-          401 - unauthorized
-          500 - otherwise
-        """
-        body = request.get_json()
-
-        if not body["oauth"]:
-            return {"message": "missing field `oauth`"}, 400
-
-        token = body["oauth"]
-        del body["oauth"]
-
-        if body["password"] != body["password_confirmation"]:
-            return (
-                {"message": "`password` and `password_confirmation` don't match"},
-                401,
-            )
-        del body["password_confirmation"]
-
-        # Encrypt password prior to storing
-
-        collection = db.admins
-        if collection.find_one({"email": body["email"]}) is not None:
-            return (
-                {
-                    "message": f"failed to create admin with email <{body['email']}>: duplicate"
-                },
-                409,
-            )
-
-        result = collection.insert_one(body)
-        if not result.acknowledged:
-            abort(500)
-
-        return (
-            {"message": f"successfully created admin {body['name']} <{body['email']}>"},
-            201,
-        )
-
     @app.route("/v1/admin")
+    @jwt_required
     def admins() -> Dict[str, List[str]]:
         """
         List all admins
@@ -412,6 +290,7 @@ def create_app(db) -> Flask:
         return {"admins": admins}
 
     @app.route("/v1/admin/invite", methods=["POST"])
+    @jwt_required
     def invite_admin() -> Dict[str, str]:
         """
         Invite admin via Email
@@ -422,7 +301,6 @@ def create_app(db) -> Flask:
 
           {
             "email": "email",
-            "oauth": "token"
           }
 
           Returns:
@@ -452,6 +330,7 @@ def create_app(db) -> Flask:
         return {"message": f"email sent to {body['email']}"}
 
     @app.route("/v1/admin/<email>", methods=["PUT"])
+    @jwt_required
     def update_admin(email: str) -> Tuple[Dict[str, str], int]:
         """
         Update Admin
@@ -467,7 +346,6 @@ def create_app(db) -> Flask:
             "email": "email",
             "password": "password",
             "password_confirmation": "password",
-            "oauth": "token"
           }
 
         Returns:
@@ -479,8 +357,6 @@ def create_app(db) -> Flask:
           500 - otherwise
         """
         body = request.get_json()
-        if not body["oauth"]:
-            return {"message": "missing field `oauth`"}, 400
 
         if body["password"] != body["password_confirmation"]:
             return (
@@ -489,7 +365,6 @@ def create_app(db) -> Flask:
             )
 
         del body["password_confirmation"]
-        # TODO: Authenticate user
 
         collection = db.admins
         result = collection.replace_one({"email": email}, body)
@@ -499,6 +374,7 @@ def create_app(db) -> Flask:
         return {"message": f"successfully updated admin <{email}>"}, 200
 
     @app.route("/v1/admin/<email>", methods=["DELETE"])
+    @jwt_required
     def delete_admin(email: str) -> Dict[str, str]:
         """
         Delete Admin
@@ -519,5 +395,3 @@ def create_app(db) -> Flask:
         if result.deleted_count == 0:
             abort(500)
         return {"message": f"successfully deleted admin <{email}>"}
-
-    return app
