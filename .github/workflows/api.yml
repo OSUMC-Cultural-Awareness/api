@@ -29,4 +29,4 @@ jobs:
 
       - name: Mypy
         run: |
-          pipenv run mypy -m api
+          pipenv run mypy api
