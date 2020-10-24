@@ -1,6 +1,6 @@
 def test_list_admins(client):
     res = client.get("/v1/admin")
-    assert res.get_json()["admins"] == []
+    assert res.get_json()["admins"] == ["admin"]
 
     res = client.post(
         "/v1/register",
@@ -14,7 +14,7 @@ def test_list_admins(client):
     )
 
     res = client.get("/v1/admin")
-    assert res.get_json()["admins"] == ["tester"]
+    assert res.get_json()["admins"] == ["admin", "tester"]
 
 
 def test_login(client):
@@ -32,7 +32,20 @@ def test_login(client):
     res = client.post(
         "/v1/login", json={"email": "tester@gmail.com", "password": "password"}
     )
-    assert res.get_json() == {"message": "Authenticated"}
+    assert res.status_code == 200
+    assert res.get_json()["token"] is not None
+
+
+def test_login_invalid(client):
+    res = client.post(
+        "/v1/login", json={"email": "admin@gmail.com", "password": "not-the-password"}
+    )
+    assert res.status_code == 401
+
+
+def test_invalid_jwt(client):
+    res = client.get("v1/admin", headers={"Authorization": "Bearer " + "this-is-fake"})
+    assert res.status_code == 422
 
 
 def test_create_admin(client):
@@ -47,9 +60,7 @@ def test_create_admin(client):
         },
     )
     assert res.status_code == 201
-    assert res.get_json() == {
-        "message": "successfully created admin tester <tester@gmail.com>"
-    }
+    assert res.get_json()["token"] is not None
 
 
 def test_create_admin_duplicate(client):
@@ -129,4 +140,4 @@ def test_update_admin(client):
     }
 
     res = client.get("/v1/admin")
-    assert res.get_json() == {"admins": ["tester-different-name"]}
+    assert res.get_json() == {"admins": ["admin", "tester-different-name"]}
