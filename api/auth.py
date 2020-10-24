@@ -12,7 +12,7 @@ from flask_jwt_extended import (  # type: ignore
 from pymongo import MongoClient  # type: ignore
 
 
-def auth(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
+def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     """
     Setup JWT Authentication via flask_jwt_extended and Login and Register route
 

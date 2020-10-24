@@ -5,7 +5,7 @@ from flask import Flask
 from flask_bcrypt import Bcrypt  # type: ignore
 
 from . import create_app
-from .auth import auth
+from .auth import auth_routes
 from .resource.admin import admin_routes
 from .resource.culture import culture_routes
 
@@ -28,7 +28,7 @@ def client():
     app.config["SECRET_KEY"] = "testing"
     bcrypt = Bcrypt(app)
 
-    auth(app, db, bcrypt)
+    auth_routes(app, db, bcrypt)
     admin_routes(app, db)
     culture_routes(app, db)
     app.config["TESTING"] = True

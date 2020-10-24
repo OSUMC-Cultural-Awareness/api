@@ -28,6 +28,6 @@ app.config.update(
 bcrypt = Bcrypt(app)
 
 # Routes
-auth(app, db, bcrypt)
+auth_routes(app, db, bcrypt)
 admin_routes(app, db)
 culture_routes(app, db)
