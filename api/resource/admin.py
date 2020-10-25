@@ -1,13 +1,26 @@
-from typing import Any, Dict, List, Tuple, Optional
+"""
+Module for admin routes
+"""
+from typing import Dict, List, Tuple
 
 from flask import Flask, request
 from flask_mail import Mail, Message  # type: ignore
-from flask_jwt_extended import jwt_required, get_jwt_identity  # type: ignore
+from flask_jwt_extended import jwt_required  # type: ignore
 
 from pymongo import MongoClient  # type:ignore
 
 
 def admin_routes(app: Flask, db: MongoClient) -> None:
+    """
+    Adds Admin routes to Flask App
+
+    Parameters:
+
+    app: Flask app
+
+    db: MongoDB client
+    """
+
     mail = Mail(app)
 
     @app.route("/v1/admin")

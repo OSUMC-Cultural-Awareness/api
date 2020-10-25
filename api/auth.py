@@ -1,4 +1,7 @@
-from typing import Any, Dict, List, Tuple, Optional
+"""
+Module for Authentication and Authorization Routes
+"""
+from typing import Dict, Tuple
 
 from flask import Flask, request
 
@@ -24,10 +27,6 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         db: MongoDB client
 
         bcrypt: Bcrypt handle
-
-    Returns:
-
-        JWTManager instance
     """
     jwt = JWTManager(app)
 

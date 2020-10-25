@@ -1,6 +1,7 @@
+"""
+Main entry point for Flask app
+"""
 import os
-
-from flask import Flask
 
 from flask_bcrypt import Bcrypt  # type: ignore
 
