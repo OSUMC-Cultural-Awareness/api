@@ -69,7 +69,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         culture["_id"] = str(culture["_id"])
         return culture
 
-    @app.route("/v1/<name>/download")
+    @app.route("/v1/culture/<name>/download")
     def download_culture(name: str) -> Any:
         """
         Fetch all information about a specific Culture Group in downloadable
