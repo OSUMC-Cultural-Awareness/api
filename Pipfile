@@ -14,6 +14,8 @@ isort = "*"
 flask = "*"
 pymongo = "*"
 flask-mail = "*"
+flask-bcrypt = "*"
+flask-jwt-extended = "*"
 
 [requires]
 python_version = "3.8"
