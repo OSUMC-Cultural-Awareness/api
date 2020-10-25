@@ -91,7 +91,7 @@ def test_create_admin_duplicate(client):
     assert res1.status_code == 409
 
     assert res1.get_json() == {
-        "message": "failed to create admin with email <tester@gmail.com>: duplicate"
+        "msg": "failed to create admin with email <tester@gmail.com>: duplicate"
     }
 
 
@@ -107,9 +107,7 @@ def test_delete_admin(client):
         },
     )
     res = client.delete("/v1/admin/tester@gmail.com")
-    assert res.get_json() == {
-        "message": "successfully deleted admin <tester@gmail.com>"
-    }
+    assert res.get_json() == {"msg": "successfully deleted admin <tester@gmail.com>"}
 
 
 def test_update_admin(client):
@@ -135,9 +133,7 @@ def test_update_admin(client):
         },
     )
 
-    assert res.get_json() == {
-        "message": "successfully updated admin <tester@gmail.com>"
-    }
+    assert res.get_json() == {"msg": "successfully updated admin <tester@gmail.com>"}
 
     res = client.get("/v1/admin")
     assert res.get_json() == {"admins": ["admin", "tester-different-name"]}

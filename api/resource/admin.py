@@ -46,7 +46,7 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
           Returns:
             200 - admin successfully added
 
-            {"message": "email sent to EMAIL"}
+            {"msg": "email sent to EMAIL"}
 
             401 - bad auth token
             500 - otherwise
@@ -67,7 +67,7 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
           </html>
           """
         mail.send(msg)
-        return {"message": f"email sent to {body['email']}"}
+        return {"msg": f"email sent to {body['email']}"}
 
     @app.route("/v1/admin/<email>", methods=["PUT"])
     @jwt_required
@@ -91,7 +91,7 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
         Returns:
           200 - admin successfully updated
 
-          {"message": "successfully updated admin <EMAIL>"}
+          {"msg": "successfully updated admin <EMAIL>"}
 
           401 - bad auth token
           500 - otherwise
@@ -100,7 +100,7 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
 
         if body["password"] != body["password_confirmation"]:
             return (
-                {"message": "`password` and `password_confirmation` don't match"},
+                {"msg": "`password` and `password_confirmation` don't match"},
                 401,
             )
 
@@ -111,7 +111,7 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
         if result.matched_count == 0 or result.modified_count == 0:
             abort(500)
 
-        return {"message": f"successfully updated admin <{email}>"}, 200
+        return {"msg": f"successfully updated admin <{email}>"}, 200
 
     @app.route("/v1/admin/<email>", methods=["DELETE"])
     @jwt_required
@@ -125,7 +125,7 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
         Returns:
           200 - admin successfully deleted
 
-          {"message": "successfully deleted admin <EMAIL>"}
+          {"msg": "successfully deleted admin <EMAIL>"}
 
           401 - bad auth token
           500 - otherwise
@@ -134,4 +134,4 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
         result = collection.delete_one({"email": email})
         if result.deleted_count == 0:
             abort(500)
-        return {"message": f"successfully deleted admin <{email}>"}
+        return {"msg": f"successfully deleted admin <{email}>"}
