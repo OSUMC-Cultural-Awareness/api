@@ -48,32 +48,32 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
           Returns:
             200 - Oauth token
 
-            {"Message": "Authenticated"}
+            {"token": JWT}
 
             400 - malformed request body
             401 - wrong password
             500 - otherwise
         """
         if not request.is_json:
-            return {"message": "Request body must be JSON"}, 400
+            return {"msg": "Request body must be JSON"}, 400
 
         email = request.json.get("email", None)
         password = request.json.get("password", None)
 
         if not email:
-            return {"message": "Request body must have 'email'"}, 400
+            return {"msg": "Request body must have 'email'"}, 400
 
         if not password:
-            return {"message": "Request body must have 'password'"}, 400
+            return {"msg": "Request body must have 'password'"}, 400
 
         collection = db.admins
         admin = collection.find_one({"email": email})
 
         if not admin:
-            return {"message": "Invalid username or password"}, 401
+            return {"msg": "Invalid username or password"}, 401
 
         if not bcrypt.check_password_hash(admin["password"], password):
-            return {"message": "Invalid username or password"}, 401
+            return {"msg": "Invalid username or password"}, 401
 
         return {"token": create_access_token(identity=email)}, 200
 
@@ -99,7 +99,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         Returns:
           200 - New admin created
 
-          {"message": "successfully created admin NAME <EMAIL>"}
+          {"token": JWT}
 
           400 - Malformed body
           401 - unauthorized
@@ -109,7 +109,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
         if body["password"] != body["password_confirmation"]:
             return (
-                {"message": "`password` and `password_confirmation` don't match"},
+                {"msg": "`password` and `password_confirmation` don't match"},
                 401,
             )
         del body["password_confirmation"]
@@ -118,7 +118,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         if collection.find_one({"email": body["email"]}) is not None:
             return (
                 {
-                    "message": f"failed to create admin with email <{body['email']}>: duplicate"
+                    "msg": f"failed to create admin with email <{body['email']}>: duplicate"
                 },
                 409,
             )
@@ -127,6 +127,6 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
         result = collection.insert_one(body)
         if not result.acknowledged:
-            return {"message": "internal error"}, 500
+            return {"msg": "internal error"}, 500
 
         return {"token": create_access_token(identity=body["email"])}, 201

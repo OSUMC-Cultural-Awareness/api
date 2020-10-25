@@ -18,19 +18,19 @@ def error_handlers(app: Flask) -> None:
 
     @app.errorhandler(400)
     def malformed_request(error):
-        return {"message": "malformed request"}, 400
+        return {"msg": "malformed request"}, 400
 
     @app.errorhandler(401)
     def unauthorized(error):
-        return {"message": "unauthorized"}, 401
+        return {"msg": "unauthorized"}, 401
 
     @app.errorhandler(500)
     def internal_server_error(error):
-        return {"message": "internal server error"}, 500
+        return {"msg": "internal server error"}, 500
 
     @app.errorhandler(404)
     def not_found(error):
-        return {"message": "resource not found"}
+        return {"msg": "resource not found"}
 
 
 def create_app(db: MongoClient) -> Flask:
@@ -79,6 +79,6 @@ def create_app(db: MongoClient) -> Flask:
         """
         Health route
         """
-        return {"message": "healthy"}
+        return {"msg": "healthy"}
 
     return app
