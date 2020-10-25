@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Tuple, Optional
 
-from flask import Flask, abort, request
+from flask import Flask, request
 from flask_mail import Mail, Message  # type: ignore
 from flask_jwt_extended import jwt_required, get_jwt_identity  # type: ignore
 
@@ -109,13 +109,13 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
         collection = db.admins
         result = collection.replace_one({"email": email}, body)
         if result.matched_count == 0 or result.modified_count == 0:
-            abort(500)
+            return {"msg": "Internal server error"}, 500
 
         return {"msg": f"successfully updated admin <{email}>"}, 200
 
     @app.route("/v1/admin/<email>", methods=["DELETE"])
     @jwt_required
-    def delete_admin(email: str) -> Dict[str, str]:
+    def delete_admin(email: str) -> Tuple[Dict[str, str], int]:
         """
         Delete Admin
 
@@ -133,5 +133,5 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
         collection = db.admins
         result = collection.delete_one({"email": email})
         if result.deleted_count == 0:
-            abort(500)
-        return {"msg": f"successfully deleted admin <{email}>"}
+            return {"msg": "Internal server error"}, 500
+        return {"msg": f"successfully deleted admin <{email}>"}, 200
