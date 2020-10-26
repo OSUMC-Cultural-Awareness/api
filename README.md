@@ -70,6 +70,9 @@ MONGO_INITDB_ROOT_PASSWORD=password
 MONGO_IP=172.19.199.3
 MONGO_PORT=27017
 
+# SECRET_KEY randomly generate, MUST be secure
+SECRET_KEY=this-is-a-secret-key-keep-it-secret
+
 GMAIL_ADDRESS=osumc.cultural.awareness@gmail.com
 GMAIL_PASSWORD=password
 ```

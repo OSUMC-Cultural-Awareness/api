@@ -1,3 +1,7 @@
+"""
+Module that handles MongoDB connection
+"""
+
 import os
 
 from pymongo import MongoClient  # type:ignore

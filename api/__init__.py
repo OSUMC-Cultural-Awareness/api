@@ -11,28 +11,6 @@ from flask import Flask
 from pymongo import MongoClient  # type:ignore
 
 
-def error_handlers(app: Flask) -> None:
-    """
-    Define common Flask error handlers
-    """
-
-    @app.errorhandler(400)
-    def malformed_request(error):
-        return {"msg": "malformed request"}, 400
-
-    @app.errorhandler(401)
-    def unauthorized(error):
-        return {"msg": "unauthorized"}, 401
-
-    @app.errorhandler(500)
-    def internal_server_error(error):
-        return {"msg": "internal server error"}, 500
-
-    @app.errorhandler(404)
-    def not_found(error):
-        return {"msg": "resource not found"}
-
-
 def create_app(db: MongoClient) -> Flask:
     """
     Construct Flask App with all Endpoints
@@ -42,7 +20,6 @@ def create_app(db: MongoClient) -> Flask:
       Flask app
     """
     app = Flask(__name__)
-    error_handlers(app)
 
     @app.route("/")
     def index() -> Dict[str, List[Dict[str, Any]]]:

@@ -1,4 +1,7 @@
-from typing import Any, Dict, List, Tuple, Optional
+"""
+Module for culture routes
+"""
+from typing import Any, Dict, List, Tuple
 
 from flask import Flask, request
 from flask_jwt_extended import jwt_required  # type: ignore
@@ -7,6 +10,16 @@ from pymongo import MongoClient  # type:ignore
 
 
 def culture_routes(app: Flask, db: MongoClient) -> None:
+    """
+    Adds Culture routes to Flask App
+
+    Parameters:
+
+    app: Flask app
+
+    db: MongoDB client
+    """
+
     @app.route("/v1/culture")
     def cultures() -> Tuple[Dict[str, List[str]], int]:
         """
@@ -84,7 +97,6 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
           200 - file sent to browser for download
           500 - otherwise
         """
-        pass
 
     @app.route("/v1/culture", methods=["POST"])
     @jwt_required
