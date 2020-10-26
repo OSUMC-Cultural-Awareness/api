@@ -2,9 +2,15 @@ import os
 import sys
 
 sys.path.insert(0, "/appdata")
-from api.db_connection import connect
+
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
+from flask_jwt_extended import create_access_token, JWTManager
+from flask_bcrypt import Bcrypt
+
+from api.db_connection import connect
+from api import create_app
+
 
 # general functions
 def list_collections():
@@ -53,8 +59,18 @@ def print_admins():
     print(db.admins.count_documents({}))
 
 
-def create_admin(value):
-    return db.admins.insert_one(value)
+def create_admin(name, email, password):
+    return db.admins.insert_one(
+        {
+            "name": name,
+            "email": email,
+            "password": bcrypt.generate_password_hash(password),
+        }
+    )
+
+
+def get_admin(name):
+    return db.admins.find_one({"name": name})
 
 
 def delete_admin(admin_id):
@@ -69,5 +85,22 @@ def update_admin(value):
     return db.admins.replace_one({"_id": value["_id"]}, value)
 
 
-# instantiate db
-db = connect()
+# auth functions
+def create_token(email):
+    ret = ""
+    with app.app_context():
+        ret = create_access_token(identity="J.Simpson@example.com")
+
+    return ret
+
+
+if __name__ == "__main__":
+    # instantiate db and app
+    db = connect()
+    app = create_app(db)
+    app.config.update(
+        SECRET_KEY=os.getenv("SECRET_KEY"),
+        JWT_SECRET_KEY=os.getenv("JWT_SECRET_KEY"),
+    )
+    jwt = JWTManager(app)
+    bcrypt = Bcrypt(app)
