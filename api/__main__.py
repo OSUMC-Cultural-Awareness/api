@@ -28,5 +28,5 @@ bcrypt = Bcrypt(app)
 
 # Routes
 auth_routes(app, db, bcrypt)
-admin_routes(app, db)
+admin_routes(app, db, bcrypt)
 culture_routes(app, db)

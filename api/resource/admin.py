@@ -4,13 +4,14 @@ Module for admin routes
 from typing import Dict, List, Tuple
 
 from flask import Flask, request
+from flask_bcrypt import Bcrypt  # type: ignore
 from flask_mail import Mail, Message  # type: ignore
 from flask_jwt_extended import jwt_required  # type: ignore
 
 from pymongo import MongoClient  # type:ignore
 
 
-def admin_routes(app: Flask, db: MongoClient) -> None:
+def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     """
     Adds Admin routes to Flask App
 
@@ -19,6 +20,8 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
     app: Flask app
 
     db: MongoDB client
+
+    bcrypt: Bcrypt handle
     """
 
     mail = Mail(app)
@@ -118,6 +121,8 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
             )
 
         del body["password_confirmation"]
+
+        body["password"] = bcrypt.generate_password_hash(body["password"])
 
         collection = db.admins
         result = collection.replace_one({"email": email}, body)

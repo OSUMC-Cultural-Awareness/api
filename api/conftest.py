@@ -41,7 +41,7 @@ def client():
     bcrypt = Bcrypt(app)
 
     auth_routes(app, db, bcrypt)
-    admin_routes(app, db)
+    admin_routes(app, db, bcrypt)
     culture_routes(app, db)
     app.config["TESTING"] = True
 
