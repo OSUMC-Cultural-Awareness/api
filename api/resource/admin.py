@@ -20,6 +20,8 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     app: Flask app
 
     db: MongoDB client
+
+    bcrypt: Bcrypt handle
     """
 
     mail = Mail(app)
