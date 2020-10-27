@@ -89,7 +89,7 @@ def update_admin(value):
 def create_token(email):
     ret = ""
     with app.app_context():
-        ret = create_access_token(identity="J.Simpson@example.com")
+        ret = create_access_token(identity=email)
 
     return ret
 
