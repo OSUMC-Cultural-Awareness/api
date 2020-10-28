@@ -16,6 +16,7 @@ pymongo = "*"
 flask-mail = "*"
 flask-bcrypt = "*"
 flask-jwt-extended = "*"
+marshmallow = "*"
 
 [requires]
 python_version = "3.8"
