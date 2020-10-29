@@ -10,7 +10,7 @@ from flask_jwt_extended import jwt_required  # type: ignore
 
 from pymongo import MongoClient  # type:ignore
 
-from ..models import validate_request_body, AdminInviteSchema, AdminUpdateSchema
+from ..request_schemas import validate_request_body, AdminInviteSchema, AdminUpdateSchema
 
 
 def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
