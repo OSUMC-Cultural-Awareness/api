@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <img src="./public/logo.png" alt="Logo" width="580" height="80">
+  <img src="./public/osu-cse-logo.jpg" alt="Logo" width="580" height="80">
 
   <h3 align="center">OSUMC Cultural Awareness App</h3>
 
