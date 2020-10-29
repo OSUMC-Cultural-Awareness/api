@@ -10,6 +10,8 @@ from flask_jwt_extended import jwt_required  # type: ignore
 
 from pymongo import MongoClient  # type:ignore
 
+from ..models import validate_request_body, AdminInviteSchema, AdminUpdateSchema
+
 
 def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     """
@@ -67,8 +69,16 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
             401 - bad auth token
             500 - otherwise
         """
+        body = validate_request_body(AdminInviteSchema, request.json)
+        if not body:
+            return {"msg": "Invalid request body"}, 400
 
-        body = request.get_json()
+        if db.admins.find_one({"email": body["email"]}) is not None:
+            return (
+                {"msg": f"<{body['email']}>: duplicate"},
+                409,
+            )
+
         msg = Message(
             "Account Activation",
             sender="osumc.cultural.awareness@gmail.com",
@@ -112,20 +122,30 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
           401 - bad auth token
           500 - otherwise
         """
-        body = request.get_json()
+        body = validate_request_body(AdminUpdateSchema, request.json)
+        if not body:
+            return {"msg": "Invalid request body"}, 400
 
-        if body["password"] != body["password_confirmation"]:
-            return (
-                {"msg": "`password` and `password_confirmation` don't match"},
-                401,
-            )
+        admin = db.admins.find_one({"email": body["email"]})
 
-        del body["password_confirmation"]
+        if "password" in body:
+            if body["password"] != body["password_confirmation"]:
+                return (
+                    {"msg": "`password` and `password_confirmation` don't match"},
+                    401,
+                )
+            del body["password_confirmation"]
+            body["password"] = bcrypt.generate_password_hash(body["password"])
+        else:
+            body["password"] = admin["password"]
 
-        body["password"] = bcrypt.generate_password_hash(body["password"])
+        if "superUser" not in body:
+            body["superUser"] = admin["superUser"]
 
-        collection = db.admins
-        result = collection.replace_one({"email": email}, body)
+        if "name" not in body:
+            body["name"] = admin["name"]
+
+        result = db.admins.replace_one({"email": email}, body)
         if result.matched_count == 0 or result.modified_count == 0:
             return {"msg": "Internal server error"}, 500
 
