@@ -32,7 +32,7 @@ class AdminLoginSchema(Schema):
     POST /v1/login
     """
 
-    email = fields.String(required=True)
+    email = fields.Email(required=True)
     password = fields.String(required=True)
 
 
@@ -42,7 +42,7 @@ class AdminRegisterSchema(Schema):
     """
 
     name = fields.String(required=True)
-    email = fields.String(required=True)
+    email = fields.Email(required=True)
     password = fields.String(required=True)
     password_confirmation = fields.String(required=True)
 
@@ -52,7 +52,7 @@ class AdminInviteSchema(Schema):
     POST /v1/admin/invite
     """
 
-    email = fields.String(required=True)
+    email = fields.Email(required=True)
 
 
 class AdminUpdateSchema(Schema):
@@ -60,7 +60,7 @@ class AdminUpdateSchema(Schema):
     PUT /v1/admin/<email>
     """
 
-    email = fields.String(required=True)
+    email = fields.Email(required=True)
     name = fields.String()
     password = fields.String()
     password_confirmation = fields.String()
@@ -74,5 +74,4 @@ def validate_request_body(schema, body):
     try:
         return schema().load(body)
     except ValidationError as err:
-        print(err.messages)
-        print(err.valid_data)
+        return(f"Error: Request body containing `{err.valid_data}` invalid: {err.messages}")

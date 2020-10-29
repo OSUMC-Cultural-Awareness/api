@@ -74,8 +74,8 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
             500 - otherwise
         """
         body = validate_request_body(AdminInviteSchema, request.json)
-        if not body:
-            return {"msg": "Invalid request body"}, 400
+        if type(body) == str:
+            return {"msg": body}, 400
 
         if db.admins.find_one({"email": body["email"]}) is not None:
             return (
@@ -127,8 +127,8 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
           500 - otherwise
         """
         body = validate_request_body(AdminUpdateSchema, request.json)
-        if not body:
-            return {"msg": "Invalid request body"}, 400
+        if type(body) == str:
+            return {"msg": body}, 400
 
         admin = db.admins.find_one({"email": body["email"]})
 
