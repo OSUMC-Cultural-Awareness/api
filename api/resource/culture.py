@@ -8,6 +8,8 @@ from flask_jwt_extended import jwt_required  # type: ignore
 
 from pymongo import MongoClient  # type:ignore
 
+from ..models import validate_request_body, CultureCreateSchema, CultureUpdateSchema
+
 
 def culture_routes(app: Flask, db: MongoClient) -> None:
     """
@@ -110,8 +112,6 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
           {
             "name": "culture-name",
-            "general_insights": [],
-            "specialized_insights": [],
            }
 
         Returns:
@@ -120,7 +120,9 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
           401 - bad auth token
           500 - otherwise
         """
-        body = request.get_json()
+        body = validate_request_body(CultureCreateSchema, request.get_json())
+        if not body:
+            return {"msg": "Culture creation unsuccessful"}, 400
 
         collection = db.cultures
         if collection.find_one({"name": body["name"]}) is not None:
@@ -128,6 +130,9 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
                 {"msg": f"failed to create culture {body['name']}: already exists"},
                 409,
             )
+
+        body["general_insights"] = []
+        body["specialized_insights"] = []
 
         result = collection.insert_one(body)
 
@@ -174,10 +179,11 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
           401 - bad auth token
           500 - otherwise
         """
-        body = request.get_json()
+        body = validate_request_body(CultureUpdateSchema, request.get_json())
+        if not body:
+            return {"msg": "Culture creation unsuccessful"}, 400
 
-        collection = db.cultures
-        result = collection.replace_one({"name": name}, body)
+        result = db.cultures.replace_one({"name": name}, body)
 
         if result.matched_count == 0:
             return body, 201
