@@ -14,7 +14,11 @@ from flask_jwt_extended import (  # type: ignore
 
 from pymongo import MongoClient  # type: ignore
 
-from .request_schemas import validate_request_body, AdminLoginSchema, AdminRegisterSchema
+from .request_schemas import (
+    validate_request_body,
+    AdminLoginSchema,
+    AdminRegisterSchema,
+)
 
 
 def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
