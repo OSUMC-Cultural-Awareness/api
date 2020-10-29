@@ -9,7 +9,6 @@ def test_list_admins(client):
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
-            "oauth": "test",
         },
     )
 
@@ -25,7 +24,6 @@ def test_login(client):
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
-            "oauth": "test",
         },
     )
 
@@ -56,7 +54,6 @@ def test_create_admin(client):
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
-            "oauth": "test",
         },
     )
     assert res.status_code == 201
@@ -71,7 +68,6 @@ def test_create_admin_duplicate(client):
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
-            "oauth": "test",
         },
     )
 
@@ -84,7 +80,6 @@ def test_create_admin_duplicate(client):
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
-            "oauth": "test",
         },
     )
 
@@ -103,7 +98,6 @@ def test_delete_admin(client):
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
-            "oauth": "test",
         },
     )
     res = client.delete("/v1/admin/tester@gmail.com")
@@ -118,7 +112,6 @@ def test_update_admin(client):
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
-            "oauth": "test",
         },
     )
 
@@ -129,7 +122,6 @@ def test_update_admin(client):
             "email": "tester@gmail.com",
             "password": "password",
             "password_confirmation": "password",
-            "oauth": "test",
         },
     )
 

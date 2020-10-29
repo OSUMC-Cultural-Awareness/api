@@ -8,9 +8,6 @@ def test_list_cultures(client):
         "v1/culture",
         json={
             "name": "test",
-            "oauth": "test",
-            "general_insights": [],
-            "specialized_insights": [],
         },
     )
 
@@ -23,9 +20,6 @@ def test_create_culture(client):
         "v1/culture",
         json={
             "name": "test",
-            "oauth": "test",
-            "general_insights": [],
-            "specialized_insights": [],
         },
     )
 
@@ -40,9 +34,6 @@ def test_create_culture_duplicate(client):
         "v1/culture",
         json={
             "name": "test",
-            "oauth": "test",
-            "general_insights": [],
-            "specialized_insights": [],
         },
     )
 
@@ -52,9 +43,6 @@ def test_create_culture_duplicate(client):
         "v1/culture",
         json={
             "name": "test",
-            "oauth": "test",
-            "general_insights": [],
-            "specialized_insights": [],
         },
     )
 
@@ -66,9 +54,6 @@ def test_delete_culture(client):
         "v1/culture",
         json={
             "name": "test",
-            "oauth": "test",
-            "general_insights": [],
-            "specialized_insights": [],
         },
     )
 
@@ -84,9 +69,6 @@ def test_detailed_culture(client):
         "v1/culture",
         json={
             "name": "test",
-            "oauth": "test",
-            "general_insights": [],
-            "specialized_insights": [],
         },
     )
 
@@ -100,9 +82,6 @@ def test_snapshot_culture(client):
         "v1/culture",
         json={
             "name": "test",
-            "oauth": "test",
-            "general_insights": [],
-            "specialized_insights": [],
         },
     )
     response_json = response.get_json()
@@ -118,9 +97,6 @@ def test_update_culture(client):
         "v1/culture",
         json={
             "name": "test",
-            "oauth": "test",
-            "general_insights": [],
-            "specialized_insights": [],
         },
     )
     response_json = response.get_json()
@@ -129,8 +105,7 @@ def test_update_culture(client):
         "v1/culture/test",
         json={
             "name": "test",
-            "oauth": "test",
-            "general_insights": ["idk"],
+            "general_insights": [{"text": "some interesting text"}],
             "specialized_insights": [],
         },
     )
@@ -138,4 +113,4 @@ def test_update_culture(client):
     update_json = update_response.get_json()
     assert update_json != response_json
 
-    assert update_json["general_insights"][0] == "idk"
+    assert update_json["general_insights"][0] == {"text": "some interesting text"}
