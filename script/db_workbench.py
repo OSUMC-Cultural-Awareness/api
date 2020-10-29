@@ -69,6 +69,7 @@ def create_su_admin(name, email, password):
         }
     )
 
+
 def create_admin(name, email, password, superUser):
     return db.admins.insert_one(
         {
@@ -78,6 +79,7 @@ def create_admin(name, email, password, superUser):
             "superUser": False,
         }
     )
+
 
 def get_admin(name):
     return db.admins.find_one({"name": name})
