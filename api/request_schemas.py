@@ -67,7 +67,7 @@ class AdminUpdateSchema(Schema):
     superUser = fields.Boolean()
 
 
-def validate_request_body(schema: Schema, body: Dict) -> Union[str, Dict[str, Any]]:
+def validate_request_body(schema, body: Dict) -> Union[str, Dict[str, Any]]:
     """
     Validates a request body using the corresponding request schema
     """
