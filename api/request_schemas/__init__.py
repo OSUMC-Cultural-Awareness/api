@@ -1,3 +1,7 @@
+"""
+Module for request body schemas and validation function
+"""
+
 from marshmallow import Schema, fields, ValidationError
 
 
