@@ -106,8 +106,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         """
         body = validate_request_body(AdminRegisterSchema, request.get_json())
         if type(body) == str:
-            return {"msg": "Registration unsuccessful"}, 400
-
+            return {"msg": body}, 400
 
         if body["password"] != body["password_confirmation"]:
             return (
