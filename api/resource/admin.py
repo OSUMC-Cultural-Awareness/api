@@ -53,7 +53,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
     @app.route("/v1/admin/invite", methods=["POST"])
     @jwt_required
-    def invite_admin() -> Dict[str, str]:
+    def invite_admin() -> Tuple[Dict[str, str], int]:
         """
         Invite admin via Email
 
@@ -97,7 +97,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
           </html>
           """
         mail.send(msg)
-        return {"msg": f"email sent to {body['email']}"}
+        return {"msg": f"email sent to {body['email']}"}, 200
 
     @app.route("/v1/admin/<email>", methods=["PUT"])
     @jwt_required
