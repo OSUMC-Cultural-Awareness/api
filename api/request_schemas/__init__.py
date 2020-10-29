@@ -15,8 +15,12 @@ class CultureUpdateSchema(Schema):
     """
 
     name = fields.String(required=True)
-    general_insights = fields.List(fields.Dict(keys=fields.String(), values=fields.String()), required=True)
-    specialized_insights = fields.List(fields.Dict(keys=fields.String(), values=fields.String()), required=True)
+    general_insights = fields.List(
+        fields.Dict(keys=fields.String(), values=fields.String()), required=True
+    )
+    specialized_insights = fields.List(
+        fields.Dict(keys=fields.String(), values=fields.String()), required=True
+    )
 
 
 class AdminLoginSchema(Schema):
