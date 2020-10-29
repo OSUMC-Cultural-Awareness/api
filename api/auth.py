@@ -14,6 +14,8 @@ from flask_jwt_extended import (  # type: ignore
 
 from pymongo import MongoClient  # type: ignore
 
+from .models import validate_request_body, AdminLoginSchema, AdminRegisterSchema
+
 
 def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     """
@@ -53,20 +55,14 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
             401 - wrong password
             500 - otherwise
         """
-        if not request.is_json:
-            return {"msg": "Request body must be JSON"}, 400
+        body = validate_request_body(AdminLoginSchema, request.json)
+        if not body:
+            return {"msg": "Login unsuccessful"}, 400
 
-        email = request.json.get("email", None)
-        password = request.json.get("password", None)
+        email = body["email"]
+        password = body["password"]
 
-        if not email:
-            return {"msg": "Request body must have 'email'"}, 400
-
-        if not password:
-            return {"msg": "Request body must have 'password'"}, 400
-
-        collection = db.admins
-        admin = collection.find_one({"email": email})
+        admin = db.admins.find_one({"email": email})
 
         if not admin:
             return {"msg": "Invalid username or password"}, 401
@@ -104,7 +100,9 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
           401 - unauthorized
           500 - otherwise
         """
-        body = request.get_json()
+        body = validate_request_body(AdminRegisterSchema, request.get_json())
+        if not body:
+            return {"msg": "Registration unsuccessful"}, 400
 
         if body["password"] != body["password_confirmation"]:
             return (
@@ -113,8 +111,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
             )
         del body["password_confirmation"]
 
-        collection = db.admins
-        if collection.find_one({"email": body["email"]}) is not None:
+        if db.admins.find_one({"email": body["email"]}) is not None:
             return (
                 {
                     "msg": f"failed to create admin with email <{body['email']}>: duplicate"
@@ -123,8 +120,9 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
             )
 
         body["password"] = bcrypt.generate_password_hash(body["password"])
+        body["superUser"] = False
 
-        result = collection.insert_one(body)
+        result = db.admins.insert_one(body)
         if not result.acknowledged:
             return {"msg": "internal error"}, 500
 
