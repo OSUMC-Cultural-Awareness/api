@@ -1,7 +1,7 @@
 """
 Module for request body schemas and validation function
 """
-from typing import Any, Dict, Union
+from typing import Any, Dict
 from marshmallow import Schema, fields, ValidationError
 
 
