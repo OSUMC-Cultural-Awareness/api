@@ -1,7 +1,7 @@
 """
 Module for request body schemas and validation function
 """
-from typing import Any, Dict
+from typing import Any, Dict, Union
 from marshmallow import Schema, fields, ValidationError
 
 
@@ -67,7 +67,7 @@ class AdminUpdateSchema(Schema):
     superUser = fields.Boolean()
 
 
-def validate_request_body(schema, body: Dict) -> Any:
+def validate_request_body(schema, body: Dict) -> Union[str, Dict[str, Any]]:
     """
     Validates a request body using the corresponding request schema
     """
