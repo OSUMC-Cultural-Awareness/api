@@ -60,7 +60,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
             500 - otherwise
         """
         body = validate_request_body(AdminLoginSchema, request.json)
-        if type(body) == str:
+        if isinstance(body, str):
             return {"msg": "Login unsuccessful"}, 400
 
         email = body["email"]
@@ -105,7 +105,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
           500 - otherwise
         """
         body = validate_request_body(AdminRegisterSchema, request.get_json())
-        if type(body) == str:
+        if isinstance(body, str):
             return {"msg": body}, 400
 
         if body["password"] != body["password_confirmation"]:

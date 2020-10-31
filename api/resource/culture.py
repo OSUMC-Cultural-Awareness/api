@@ -125,7 +125,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
           500 - otherwise
         """
         body = validate_request_body(CultureCreateSchema, request.get_json())
-        if type(body) == str:
+        if isinstance(body, str):
             return {"msg": body}, 400
 
         collection = db.cultures
@@ -184,7 +184,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
           500 - otherwise
         """
         body = validate_request_body(CultureUpdateSchema, request.get_json())
-        if type(body) == str:
+        if isinstance(body, str):
             return {"msg": body}, 400
 
         result = db.cultures.replace_one({"name": name}, body)
