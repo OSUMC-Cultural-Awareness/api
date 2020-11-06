@@ -4,6 +4,7 @@ Main entry point for Flask app
 import os
 
 from flask_bcrypt import Bcrypt  # type: ignore
+from flask_cors import CORS  # type: ignore
 
 from . import create_app, db_connection
 from .auth import auth_routes
@@ -30,3 +31,4 @@ bcrypt = Bcrypt(app)
 auth_routes(app, db, bcrypt)
 admin_routes(app, db, bcrypt)
 culture_routes(app, db)
+CORS(app)
