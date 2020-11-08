@@ -88,22 +88,6 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         culture["_id"] = str(culture["_id"])
         return culture, 200
 
-    @app.route("/v1/culture/<name>/download")
-    def download_culture(name: str) -> Any:
-        """
-        Fetch all information about a specific Culture Group in downloadable
-        and storeable form
-
-        Parameters:
-
-          group_name: name of Culture Group
-
-        Returns:
-
-          200 - file sent to browser for download
-          500 - otherwise
-        """
-
     @app.route("/v1/culture", methods=["POST"])
     @jwt_required
     def create_culture() -> Tuple[Dict[str, str], int]:
