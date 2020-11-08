@@ -45,9 +45,9 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         return {"cultures": cultures}, 200
 
     @app.route("/v1/culture/<name>")
-    def culture_snapshot(name: str) -> Tuple[Dict[str, Any], int]:
+    def culture(name: str) -> Tuple[Dict[str, Any], int]:
         """
-        Fetch a snapshot of information about a specific Culture Group
+        Fetch information about a specific Culture Group
 
         Parameters:
 
@@ -55,29 +55,6 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
         Returns:
           200 - all general insights for a group
-          500 - otherwise
-        """
-        collection = db.cultures
-        culture = collection.find_one({"name": name})
-        if culture is None:
-            return {"msg": "Internal server error"}, 500
-
-        del culture["specialized_insights"]
-        culture["_id"] = str(culture["_id"])
-        return culture, 200
-
-    @app.route("/v1/culture/<name>/all")
-    def culture_detailed(name: str) -> Tuple[Dict[str, Any], int]:
-        """
-        Fetch all information about a specific Culture Group
-
-        Parameters:
-
-          group_name: name of Culture Group
-
-        Returns:
-          200 - all insights for a group
-          404 - culture doesn't exist
           500 - otherwise
         """
         collection = db.cultures
