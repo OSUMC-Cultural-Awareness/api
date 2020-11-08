@@ -51,6 +51,34 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         admins = [admin["email"] for admin in collection.find().sort("email")]
         return {"admins": admins}
 
+    @app.route("/v1/admin/<email>")
+    @jwt_required
+    def admin(email: str) -> Tuple[Dict[str, str], int]:
+        """
+        Fetch information about an admin 
+
+        Parameters:
+        
+        email: email of admin to get information on
+
+        Returns:
+
+        200 - admin information
+
+        {"email": "test@gmail.com", "superUser": false, "name": "test"}
+
+        401 - bad auth
+
+        404 - can't find admin
+        """
+        admin = db.admins.find_one({"email": email})
+        if admin is None:
+            return {"msg": f"unknown admin `{email}`"}, 404
+
+        del admin["password"]
+        admin["_id"] = str(admin["_id"])
+        return admin, 200
+
     @app.route("/v1/admin/invite", methods=["POST"])
     @jwt_required
     def invite_admin() -> Tuple[Dict[str, str], int]:
