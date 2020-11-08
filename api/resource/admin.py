@@ -129,7 +129,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
     @app.route("/v1/admin/<email>", methods=["PUT"])
     @jwt_required
-    def update(email: str) -> Tuple[Dict[str, str], int]:
+    def admin_update(email: str) -> Tuple[Dict[str, str], int]:
         """
         Update Admin
 
@@ -185,7 +185,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
     @app.route("/v1/admin/<email>", methods=["DELETE"])
     @jwt_required
-    def delete(email: str) -> Tuple[Dict[str, str], int]:
+    def admin_delete(email: str) -> Tuple[Dict[str, str], int]:
         """
         Delete Admin
 
