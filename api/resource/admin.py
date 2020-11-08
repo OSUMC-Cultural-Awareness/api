@@ -40,15 +40,15 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
         Returns:
 
-          200 - list of admins returned
+          200 - list of admin's emails
 
-          {"admins": ["admin1", "admin2", ...]}
+          {"admins": ["admin1@test.com", "admin2@test.com", ...]}
 
           401 - bad auth token
           500 - otherwise
         """
         collection = db.admins
-        admins = [admin["name"] for admin in collection.find().sort("name")]
+        admins = [admin["email"] for admin in collection.find().sort("email")]
         return {"admins": admins}
 
     @app.route("/v1/admin/invite", methods=["POST"])
