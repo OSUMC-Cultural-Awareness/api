@@ -1,6 +1,7 @@
 """
 Module for culture routes
 """
+import time
 from typing import Any, Dict, List, Tuple
 
 from flask import Flask, request
@@ -128,6 +129,8 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         if isinstance(body, str):
             return {"msg": body}, 400
 
+        body["modified"] = int(time.time())
+
         collection = db.cultures
         if collection.find_one({"name": body["name"]}) is not None:
             return (
@@ -187,6 +190,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         if isinstance(body, str):
             return {"msg": body}, 400
 
+        body["modified"] = int(time.time())
         result = db.cultures.replace_one({"name": name}, body)
 
         if result.matched_count == 0:
