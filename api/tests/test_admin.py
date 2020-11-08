@@ -1,6 +1,6 @@
 def test_list_admins(client):
     res = client.get("/v1/admin")
-    assert res.get_json()["admins"] == ["admin"]
+    assert res.get_json()["admins"] == ["admin@gmail.com"]
 
     res = client.post(
         "/v1/register",
@@ -13,7 +13,7 @@ def test_list_admins(client):
     )
 
     res = client.get("/v1/admin")
-    assert res.get_json()["admins"] == ["admin", "tester"]
+    assert res.get_json()["admins"] == ["admin@gmail.com", "tester@gmail.com"]
 
 
 def test_login(client):
@@ -90,6 +90,14 @@ def test_create_admin_duplicate(client):
     }
 
 
+def test_get_admin(client):
+    res = client.get("/v1/admin/admin@gmail.com")
+    res.get_json() == {
+        "name": "admin",
+        "email": "admin@gmail.com",
+    }
+
+
 def test_delete_admin(client):
     res = client.post(
         "/v1/register",
@@ -128,4 +136,4 @@ def test_update_admin(client):
     assert res.get_json() == {"msg": "successfully updated admin <tester@gmail.com>"}
 
     res = client.get("/v1/admin")
-    assert res.get_json() == {"admins": ["admin", "tester-different-name"]}
+    assert res.get_json() == {"admins": ["admin@gmail.com", "tester@gmail.com"]}
