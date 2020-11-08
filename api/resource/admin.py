@@ -55,10 +55,10 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     @jwt_required
     def admin(email: str) -> Tuple[Dict[str, str], int]:
         """
-        Fetch information about an admin 
+        Fetch information about an admin
 
         Parameters:
-        
+
         email: email of admin to get information on
 
         Returns:
@@ -81,7 +81,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
     @app.route("/v1/admin/invite", methods=["POST"])
     @jwt_required
-    def invite_admin() -> Tuple[Dict[str, str], int]:
+    def invite() -> Tuple[Dict[str, str], int]:
         """
         Invite admin via Email
 
@@ -129,7 +129,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
     @app.route("/v1/admin/<email>", methods=["PUT"])
     @jwt_required
-    def update_admin(email: str) -> Tuple[Dict[str, str], int]:
+    def update(email: str) -> Tuple[Dict[str, str], int]:
         """
         Update Admin
 
@@ -185,7 +185,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
     @app.route("/v1/admin/<email>", methods=["DELETE"])
     @jwt_required
-    def delete_admin(email: str) -> Tuple[Dict[str, str], int]:
+    def delete(email: str) -> Tuple[Dict[str, str], int]:
         """
         Delete Admin
 

@@ -67,7 +67,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
     @app.route("/v1/culture", methods=["POST"])
     @jwt_required
-    def create_culture() -> Tuple[Dict[str, str], int]:
+    def create() -> Tuple[Dict[str, str], int]:
         """
         Create a Culture with information
 
@@ -109,7 +109,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
     @app.route("/v1/culture/<name>", methods=["PUT"])
     @jwt_required
-    def update_culture(name: str) -> Tuple[Dict[str, str], int]:
+    def update(name: str) -> Tuple[Dict[str, str], int]:
         """
         Update an existing Culture
 
@@ -159,7 +159,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
     @app.route("/v1/culture/<name>", methods=["DELETE"])
     @jwt_required
-    def delete_culture(name: str) -> Tuple[Dict[str, str], int]:
+    def delete(name: str) -> Tuple[Dict[str, str], int]:
         """
         Delete an existing Culture
 
