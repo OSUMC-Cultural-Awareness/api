@@ -28,21 +28,27 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
     """
 
     @app.route("/v1/culture")
-    def cultures() -> Tuple[Dict[str, List[str]], int]:
+    def cultures() -> Tuple[Dict[str, List[Dict[str, Any]]], int]:
         """
-        Fetch a list of all culture groups in alphabetical order
+        Fetch a list of all culture groups in alphabetical order with their last modified timestamps
 
         Returns:
 
           200 - list of the all the names of culture groups
           {
-            "cultures": [culture1, culture2, ...]
+            "cultures": [
+                { "name": "culture1", "modified": 00000000 },
+                { "name": "culture2", "modified": 00000001 },
+            ]
           }
 
           500 - otherwise
         """
         collection = db.cultures
-        cultures = [culture["name"] for culture in collection.find().sort("name")]
+        cultures = [
+            {"name": culture["name"], "modified": culture["modified"]}
+            for culture in collection.find().sort("name")
+        ]
         return {"cultures": cultures}, 200
 
     @app.route("/v1/culture/<name>")
