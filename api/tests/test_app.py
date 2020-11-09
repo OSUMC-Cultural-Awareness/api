@@ -4,7 +4,7 @@ def test_index(client):
 
     index = response.get_json()
     routes = index["routes"]
-    assert len(routes) == 16
+    assert len(routes) == 15
 
 
 def test_health(client):
