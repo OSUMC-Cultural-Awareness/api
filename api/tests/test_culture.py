@@ -90,7 +90,16 @@ def test_update_culture(client):
         "v1/culture/test",
         json={
             "name": "test",
-            "general_insights": [{"text": "some interesting text"}],
+            "general_insights": [
+                {
+                    "summary": "summarizing text",
+                    "information": "some interesting information",
+                    "source": {
+                        "type": "link",
+                        "data": "http://www.randomeinformation.com",
+                    },
+                }
+            ],
             "specialized_insights": [],
         },
     )
@@ -98,4 +107,8 @@ def test_update_culture(client):
     update_json = update_response.get_json()
     assert update_json != response_json
 
-    assert update_json["general_insights"][0] == {"text": "some interesting text"}
+    assert update_json["general_insights"][0] == {
+        "summary": "summarizing text",
+        "information": "some interesting information",
+        "source": {"type": "link", "data": "http://www.randomeinformation.com"},
+    }
