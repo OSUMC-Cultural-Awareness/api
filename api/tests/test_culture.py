@@ -6,8 +6,10 @@ def test_list_cultures_empty(client):
 def test_list_cultures(client):
     response = client.post("v1/culture", json={"name": "test",},)
 
-    response = client.get("/v1/culture")
-    assert response.get_json() == {"cultures": ["test"]}
+    response1 = client.get("/v1/culture")
+    assert response1.get_json() == {
+        "cultures": [{"name": "test", "modified": response.get_json()["modified"]}]
+    }
 
 
 def test_create_culture(client):
@@ -32,14 +34,16 @@ def test_create_culture_duplicate(client):
 def test_delete_culture(client):
     response = client.post("v1/culture", json={"name": "test",},)
 
-    response = client.get("/v1/culture")
-    assert response.get_json() == {"cultures": ["test"]}
+    response1 = client.get("/v1/culture")
+    assert response1.get_json() == {
+        "cultures": [{"name": "test", "modified": response.get_json()["modified"]}]
+    }
 
     response = client.delete("v1/culture/test")
     assert response.status_code == 200
 
 
-def test_detailed_culture(client):
+def test_get_culture(client):
     response = client.post("v1/culture", json={"name": "test",},)
 
     test = client.get("/v1/culture/test")
