@@ -13,7 +13,7 @@ from .resource.culture import culture_routes
 
 
 db = db_connection.connect()
-app = create_app(db)
+app = create_app()
 CORS(app)
 
 app.config.update(

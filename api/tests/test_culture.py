@@ -4,24 +4,14 @@ def test_list_cultures_empty(client):
 
 
 def test_list_cultures(client):
-    response = client.post(
-        "v1/culture",
-        json={
-            "name": "test",
-        },
-    )
+    response = client.post("v1/culture", json={"name": "test",},)
 
     response = client.get("/v1/culture")
     assert response.get_json() == {"cultures": ["test"]}
 
 
 def test_create_culture(client):
-    response = client.post(
-        "v1/culture",
-        json={
-            "name": "test",
-        },
-    )
+    response = client.post("v1/culture", json={"name": "test",},)
 
     assert response.status_code == 201
     assert response.get_json()["name"] == "test"
@@ -30,32 +20,17 @@ def test_create_culture(client):
 
 
 def test_create_culture_duplicate(client):
-    response = client.post(
-        "v1/culture",
-        json={
-            "name": "test",
-        },
-    )
+    response = client.post("v1/culture", json={"name": "test",},)
 
     assert response.status_code == 201
 
-    response = client.post(
-        "v1/culture",
-        json={
-            "name": "test",
-        },
-    )
+    response = client.post("v1/culture", json={"name": "test",},)
 
     assert response.status_code == 409
 
 
 def test_delete_culture(client):
-    response = client.post(
-        "v1/culture",
-        json={
-            "name": "test",
-        },
-    )
+    response = client.post("v1/culture", json={"name": "test",},)
 
     response = client.get("/v1/culture")
     assert response.get_json() == {"cultures": ["test"]}
@@ -65,40 +40,15 @@ def test_delete_culture(client):
 
 
 def test_detailed_culture(client):
-    response = client.post(
-        "v1/culture",
-        json={
-            "name": "test",
-        },
-    )
+    response = client.post("v1/culture", json={"name": "test",},)
 
-    test = client.get("/v1/culture/test/all")
-
-    assert test.get_json() == response.get_json()
-
-
-def test_snapshot_culture(client):
-    response = client.post(
-        "v1/culture",
-        json={
-            "name": "test",
-        },
-    )
-    response_json = response.get_json()
-
-    del response_json["specialized_insights"]
     test = client.get("/v1/culture/test")
 
     assert test.get_json() == response.get_json()
 
 
 def test_update_culture(client):
-    response = client.post(
-        "v1/culture",
-        json={
-            "name": "test",
-        },
-    )
+    response = client.post("v1/culture", json={"name": "test",},)
     response_json = response.get_json()
 
     update_response = client.put(
