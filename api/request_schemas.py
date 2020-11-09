@@ -5,6 +5,16 @@ from typing import Any, Dict, Union
 from marshmallow import Schema, fields, ValidationError
 
 
+class InsightSchema(Schema):
+    """
+    strucure of insights
+    """
+
+    summary = fields.String(required=True)
+    information = fields.String(required=True)
+    source = fields.Dict(keys=fields.String(), values=fields.String(), required=True)
+
+
 class CultureCreateSchema(Schema):
     """
     POST /vi/culture
@@ -19,12 +29,8 @@ class CultureUpdateSchema(Schema):
     """
 
     name = fields.String(required=True)
-    general_insights = fields.List(
-        fields.Dict(keys=fields.String(), values=fields.String()), required=True
-    )
-    specialized_insights = fields.List(
-        fields.Dict(keys=fields.String(), values=fields.String()), required=True
-    )
+    general_insights = fields.List(fields.Nested(InsightSchema()), required=True)
+    specialized_insights = fields.List(fields.Nested(InsightSchema()), required=True)
 
 
 class AdminLoginSchema(Schema):
