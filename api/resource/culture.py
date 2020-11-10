@@ -1,6 +1,7 @@
 """
 Module for culture routes
 """
+import time
 from typing import Any, Dict, List, Tuple
 
 from flask import Flask, request
@@ -27,27 +28,33 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
     """
 
     @app.route("/v1/culture")
-    def cultures() -> Tuple[Dict[str, List[str]], int]:
+    def cultures() -> Tuple[Dict[str, List[Dict[str, Any]]], int]:
         """
-        Fetch a list of all culture groups in alphabetical order
+        Fetch a list of all culture groups in alphabetical order with their last modified timestamps
 
         Returns:
 
           200 - list of the all the names of culture groups
           {
-            "cultures": [culture1, culture2, ...]
+            "cultures": [
+                { "name": "culture1", "modified": 00000000 },
+                { "name": "culture2", "modified": 00000001 },
+            ]
           }
 
           500 - otherwise
         """
         collection = db.cultures
-        cultures = [culture["name"] for culture in collection.find().sort("name")]
+        cultures = [
+            {"name": culture["name"], "modified": culture["modified"]}
+            for culture in collection.find().sort("name")
+        ]
         return {"cultures": cultures}, 200
 
     @app.route("/v1/culture/<name>")
-    def culture_snapshot(name: str) -> Tuple[Dict[str, Any], int]:
+    def culture(name: str) -> Tuple[Dict[str, Any], int]:
         """
-        Fetch a snapshot of information about a specific Culture Group
+        Fetch information about a specific Culture Group
 
         Parameters:
 
@@ -60,53 +67,14 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         collection = db.cultures
         culture = collection.find_one({"name": name})
         if culture is None:
-            return {"msg": "Internal server error"}, 500
-
-        del culture["specialized_insights"]
-        culture["_id"] = str(culture["_id"])
-        return culture, 200
-
-    @app.route("/v1/culture/<name>/all")
-    def culture_detailed(name: str) -> Tuple[Dict[str, Any], int]:
-        """
-        Fetch all information about a specific Culture Group
-
-        Parameters:
-
-          group_name: name of Culture Group
-
-        Returns:
-          200 - all insights for a group
-          404 - culture doesn't exist
-          500 - otherwise
-        """
-        collection = db.cultures
-        culture = collection.find_one({"name": name})
-        if culture is None:
             return {"msg": f"unknown culture `{name}`"}, 404
 
         culture["_id"] = str(culture["_id"])
         return culture, 200
 
-    @app.route("/v1/culture/<name>/download")
-    def download_culture(name: str) -> Any:
-        """
-        Fetch all information about a specific Culture Group in downloadable
-        and storeable form
-
-        Parameters:
-
-          group_name: name of Culture Group
-
-        Returns:
-
-          200 - file sent to browser for download
-          500 - otherwise
-        """
-
     @app.route("/v1/culture", methods=["POST"])
     @jwt_required
-    def create_culture() -> Tuple[Dict[str, str], int]:
+    def culture_create() -> Tuple[Dict[str, str], int]:
         """
         Create a Culture with information
 
@@ -128,6 +96,8 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         if isinstance(body, str):
             return {"msg": body}, 400
 
+        body["modified"] = int(time.time())
+
         collection = db.cultures
         if collection.find_one({"name": body["name"]}) is not None:
             return (
@@ -148,7 +118,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
     @app.route("/v1/culture/<name>", methods=["PUT"])
     @jwt_required
-    def update_culture(name: str) -> Tuple[Dict[str, str], int]:
+    def culture_update(name: str) -> Tuple[Dict[str, str], int]:
         """
         Update an existing Culture
 
@@ -187,6 +157,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         if isinstance(body, str):
             return {"msg": body}, 400
 
+        body["modified"] = int(time.time())
         result = db.cultures.replace_one({"name": name}, body)
 
         if result.matched_count == 0:
@@ -198,7 +169,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
     @app.route("/v1/culture/<name>", methods=["DELETE"])
     @jwt_required
-    def delete_culture(name: str) -> Tuple[Dict[str, str], int]:
+    def culture_delete(name: str) -> Tuple[Dict[str, str], int]:
         """
         Delete an existing Culture
 

@@ -11,7 +11,7 @@ from flask import Flask
 from pymongo import MongoClient  # type:ignore
 
 
-def create_app(db: MongoClient) -> Flask:
+def create_app() -> Flask:
     """
     Construct Flask App with all Endpoints
 

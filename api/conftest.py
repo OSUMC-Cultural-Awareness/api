@@ -36,7 +36,7 @@ def client():
     Constructs Flask test client
     """
     db = mongomock.MongoClient().db
-    app = create_app(db)
+    app = create_app()
     app.config["SECRET_KEY"] = "testing"
     bcrypt = Bcrypt(app)
 
