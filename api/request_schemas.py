@@ -7,7 +7,18 @@ from marshmallow import Schema, fields, ValidationError
 
 class InsightSchema(Schema):
     """
-    strucure of insights
+    Structure of insights
+
+    Format:
+
+    {
+      "summary": "summary",
+      "information": "text",
+      "source": {
+        "data": "www.example.com",
+        "type": "link"
+      }
+    }
     """
 
     summary = fields.String(required=True)
@@ -18,6 +29,12 @@ class InsightSchema(Schema):
 class CultureCreateSchema(Schema):
     """
     POST /vi/culture
+
+    Format:
+
+    {
+      "name": "culture"
+    }
     """
 
     name = fields.String(required=True)
@@ -26,16 +43,34 @@ class CultureCreateSchema(Schema):
 class CultureUpdateSchema(Schema):
     """
     PUT /v1/culture/<name>
+
+    Format:
+
+    {
+      "name": "Culture",
+      "general_insights": [],
+      "specialized_insights": {"type": [InsightSchema...]}
+    }
     """
 
     name = fields.String(required=True)
     general_insights = fields.List(fields.Nested(InsightSchema()), required=True)
-    specialized_insights = fields.List(fields.Nested(InsightSchema()), required=True)
+    specialized_insights = fields.Dict(
+        keys=fields.String(),
+        values=fields.List(fields.Nested(InsightSchema()), required=True),
+    )
 
 
 class AdminLoginSchema(Schema):
     """
     POST /v1/login
+
+    Format:
+
+    {
+      "email": "test@gmail.com",
+      "password": "password"
+    }
     """
 
     email = fields.Email(required=True)
@@ -45,6 +80,15 @@ class AdminLoginSchema(Schema):
 class AdminRegisterSchema(Schema):
     """
     POST /v1/register
+
+    Format:
+
+    {
+      "name": "name",
+      "email": "test@gmail.com",
+      "password": "password",
+      "password_confirmation": "password"
+    }
     """
 
     name = fields.String(required=True)
@@ -56,6 +100,12 @@ class AdminRegisterSchema(Schema):
 class AdminInviteSchema(Schema):
     """
     POST /v1/admin/invite
+
+    Format:
+
+    {
+      "email": "test@gmail.com"
+    }
     """
 
     email = fields.Email(required=True)
@@ -64,6 +114,16 @@ class AdminInviteSchema(Schema):
 class AdminUpdateSchema(Schema):
     """
     PUT /v1/admin/<email>
+
+    Format:
+
+    {
+      "email": "test@gmail.com",
+      "name": "name",
+      "password": "password",
+      "password_confirmation": "password",
+      "superUser": true,
+    }
     """
 
     email = fields.Email(required=True)
