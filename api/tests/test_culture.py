@@ -69,7 +69,7 @@ def test_update_culture(client):
                     },
                 }
             ],
-            "specialized_insights": [],
+            "specialized_insights": {},
         },
     )
 
