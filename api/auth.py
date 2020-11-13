@@ -132,4 +132,4 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         if not result.acknowledged:
             return {"msg": "internal error"}, 500
 
-        return {"token": create_access_token(identity=body["email"])}, 201
+        return {"token": create_access_token(identity=body["email"], expires_delta=timedelta(days=1))}, 201
