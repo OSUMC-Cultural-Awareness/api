@@ -2,7 +2,7 @@
 Module for Authentication and Authorization Routes
 """
 from datetime import timedelta
-
+from json import dumps
 from typing import Dict, Tuple
 
 from flask import Flask, request
@@ -76,7 +76,11 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         if not bcrypt.check_password_hash(admin["password"], password):
             return {"msg": "Invalid username or password"}, 401
 
-        return {"token": create_access_token(identity=email, expires_delta=timedelta(days=1))}, 200
+        return {
+            "token": create_access_token(
+                identity=email, expires_delta=timedelta(days=1)
+            )
+        }, 200
 
     @app.route("/v1/register", methods=["POST"])
     @jwt_required
@@ -132,4 +136,12 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         if not result.acknowledged:
             return {"msg": "internal error"}, 500
 
-        return {"token": create_access_token(identity=body["email"], expires_delta=timedelta(days=1))}, 201
+        del body["password"]
+        body["_id"] = str(body["_id"])
+
+        return {
+            "user": dumps(body),
+            "token": create_access_token(
+                identity=body["email"], expires_delta=timedelta(days=1)
+            ),
+        }, 201
