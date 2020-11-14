@@ -5,17 +5,18 @@ from typing import Dict, List, Tuple
 
 from flask import Flask, request
 from flask_bcrypt import Bcrypt  # type: ignore
-from flask_mail import Mail, Message  # type: ignore
-from flask_jwt_extended import jwt_required  # type: ignore
+from flask_jwt_extended import (  # type: ignore
+    jwt_required,
+    create_access_token,
+)
 
 from pymongo import MongoClient  # type:ignore
-
+from ..mailer import send_invite_email
 from ..request_schemas import (
     validate_request_body,
     AdminInviteSchema,
     AdminUpdateSchema,
 )
-
 
 def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     """
@@ -29,8 +30,6 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
     bcrypt: Bcrypt handle
     """
-
-    mail = Mail(app)
 
     @app.route("/v1/admin")
     @jwt_required
@@ -111,21 +110,11 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
                 409,
             )
 
-        msg = Message(
-            "Account Activation",
-            sender="osumc.cultural.awareness@gmail.com",
-            recipients=[f"{body['email']}"],
-        )
-        msg.html = """\
-          <!DOCTYPE html>
-          <html>
-            <body>
-              <h1 style="color:SlateGray;">This is an HTML Email!</h1>
-            </body>
-          </html>
-          """
-        mail.send(msg)
-        return {"msg": f"email sent to {body['email']}"}, 200
+        token = create_access_token(identity=email, expires_delta=timedelta(days=1))
+
+        send_invite_email(app, token, email)
+
+        return {"msg": f"email sent to {email}"}, 200
 
     @app.route("/v1/admin/<email>", methods=["PUT"])
     @jwt_required
