@@ -2,6 +2,7 @@
 Module for Authentication and Authorization Routes
 """
 from datetime import timedelta
+from json import dumps
 from typing import Dict, Tuple
 
 from flask import Flask, request
