@@ -24,7 +24,7 @@ def send_invite_email(app: any, token: str, email: str) -> None:
     """
 
     mail = Mail(app)
-    with open("api/mailer/templates/invite_template.txt", "r") as f:
+    with open("api/mailer/templates/invite_template.html", "r") as f:
         template = Template(f.read())
 
     msg = Message(
