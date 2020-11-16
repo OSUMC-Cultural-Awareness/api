@@ -76,7 +76,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
             return {"msg": f"unknown admin `{email}`"}, 404
 
         del admin["password"]
-        admin["_id"] = str(admin["_id"])
+        del admin["_id"]
         return admin, 200
 
     @app.route("/v1/admin/invite", methods=["POST"])
