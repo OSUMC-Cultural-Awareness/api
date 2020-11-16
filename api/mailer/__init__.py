@@ -1,15 +1,16 @@
 """
-  This module is used for sending emails
+  Contains functions that send emails
 """
 
 import os
+from flask import Flask
 from flask_mail import Mail, Message  # type: ignore
 from jinja2 import Template
 
 FRONTEND_IP = os.getenv("FRONTEND_IP")
 
 
-def send_invite_email(app: any, token: str, email: str) -> None:
+def send_invite_email(app: Flask, token: str, email: str) -> None:
     """
     Prepare the admin invite email and send it
 
