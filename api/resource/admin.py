@@ -2,7 +2,7 @@
 Module for admin routes
 """
 from typing import Dict, List, Tuple
-
+from datetime import timedelta
 from flask import Flask, request
 from flask_bcrypt import Bcrypt  # type: ignore
 from flask_jwt_extended import (  # type: ignore
@@ -104,6 +104,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         if isinstance(body, str):
             return {"msg": body}, 400
 
+        email = body["email"]
         if db.admins.find_one({"email": body["email"]}) is not None:
             return (
                 {"msg": f"<{body['email']}>: duplicate"},
