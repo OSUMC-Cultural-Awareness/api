@@ -25,7 +25,7 @@ def send_invite_email(app: Flask, token: str, email: str) -> None:
     """
 
     mail = Mail(app)
-    with open("api/mailer/templates/invite_template.html", "r") as f:
+    with open("api/mailer/templates/invite.html", "r") as f:
         template = Template(f.read())
 
     msg = Message(
