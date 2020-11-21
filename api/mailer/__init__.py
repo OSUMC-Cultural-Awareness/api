@@ -1,6 +1,4 @@
-"""
-  Contains functions that send emails
-"""
+"""Contains functions that send emails."""
 
 import os
 
@@ -12,28 +10,18 @@ FRONTEND_IP = os.getenv("FRONTEND_IP")
 
 
 def send_invite_email(app: Flask, token: str, email: str) -> None:
-    """
-    Prepare the admin invite email and send it
+    """Prepare the admin invite email and send it.
 
-    Parameters:
-
+    Arguments:
       app: the flask app
       token: token created for the email
       email: address the email is being sent to
-
-      Returns:
-        None
     """
-
     mail = Mail(app)
     with open("api/mailer/templates/invite.html", "r") as f:
         template = Template(f.read())
 
-    msg = Message(
-        "Account Activation",
-        sender="App Admin",
-        recipients=[f"{email}"],
-    )
+    msg = Message("Account Activation", sender="App Admin", recipients=[f"{email}"],)
 
     msg.html = template.render(url=f"http://{FRONTEND_IP}/Register?token={token}")
 

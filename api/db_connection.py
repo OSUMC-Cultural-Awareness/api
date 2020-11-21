@@ -1,6 +1,4 @@
-"""
-Module that handles MongoDB connection
-"""
+"""Module that handles MongoDB connection."""
 
 import os
 
@@ -15,8 +13,7 @@ MONGO_INITDB_ROOT_PASSWORD = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
 
 
 def connect() -> MongoClient:
-    """
-    establishes a connection to the database
+    """Establishes a connection to the database.
 
     ENV variables:
         DOMAIN - container IP address of the mongodb container

@@ -1,17 +1,13 @@
-"""
-Module for request body schemas and validation function
-"""
+"""Module for request body schemas and validation function."""
 from typing import Any, Dict, Union
 
 from marshmallow import Schema, ValidationError, fields
 
 
 class InsightSchema(Schema):
-    """
-    Structure of insights
+    """Structure of insights.
 
     Format:
-
     {
       "summary": "summary",
       "information": "text",
@@ -28,11 +24,9 @@ class InsightSchema(Schema):
 
 
 class CultureCreateSchema(Schema):
-    """
-    POST /vi/culture
+    """POST /vi/culture.
 
     Format:
-
     {
       "name": "culture"
     }
@@ -42,11 +36,9 @@ class CultureCreateSchema(Schema):
 
 
 class CultureUpdateSchema(Schema):
-    """
-    PUT /v1/culture/<name>
+    """PUT /v1/culture/<name>.
 
     Format:
-
     {
       "name": "Culture",
       "general_insights": [],
@@ -63,11 +55,9 @@ class CultureUpdateSchema(Schema):
 
 
 class AdminLoginSchema(Schema):
-    """
-    POST /v1/login
+    """POST /v1/login.
 
     Format:
-
     {
       "email": "test@gmail.com",
       "password": "password"
@@ -79,11 +69,9 @@ class AdminLoginSchema(Schema):
 
 
 class AdminRegisterSchema(Schema):
-    """
-    POST /v1/register
+    """POST /v1/register.
 
     Format:
-
     {
       "name": "name",
       "email": "test@gmail.com",
@@ -99,11 +87,9 @@ class AdminRegisterSchema(Schema):
 
 
 class AdminInviteSchema(Schema):
-    """
-    POST /v1/admin/invite
+    """POST /v1/admin/invite.
 
     Format:
-
     {
       "email": "test@gmail.com"
     }
@@ -113,11 +99,9 @@ class AdminInviteSchema(Schema):
 
 
 class AdminUpdateSchema(Schema):
-    """
-    PUT /v1/admin/<email>
+    """PUT /v1/admin/<email>.
 
     Format:
-
     {
       "email": "test@gmail.com",
       "name": "name",
@@ -135,9 +119,7 @@ class AdminUpdateSchema(Schema):
 
 
 def validate_request_body(schema, body: Dict) -> Union[str, Dict[str, Any]]:
-    """
-    Validates a request body using the corresponding request schema
-    """
+    """Validates a request body using the corresponding request schema."""
     try:
         return schema().load(body)
     except ValidationError as err:

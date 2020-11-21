@@ -1,6 +1,4 @@
-"""
-Module for Authentication and Authorization Routes
-"""
+"""module for Authentication and Authorization Routes."""
 from datetime import timedelta
 from json import dumps
 from typing import Dict, Tuple
@@ -16,12 +14,11 @@ from .request_schemas import (AdminLoginSchema, AdminRegisterSchema,
 
 
 def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
-    """
-    Setup JWT Authentication via flask_jwt_extended and Login and Register route
+    """Setup JWT Authentication via flask_jwt_extended and Login and Register route.
 
     Docs: https://flask-jwt-extended.readthedocs.io/en/latest/basic_usage/
 
-    Parameters:
+    Arguments:
         app: Flask app
 
         db: MongoDB client
@@ -32,26 +29,23 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
     @app.route("/v1/login", methods=["POST"])
     def login() -> Tuple[Dict[str, str], int]:
-        """
-        Login a User
+        """Login a User.
 
-        Parameters:
-
+        Arguments:
           POST body:
-
           {
             "email": "email",
             "password": "password"
           }
 
-          Returns:
-            200 - Oauth token
+        Returns:
+          200 - Oauth token
 
-            {"token": JWT}
+          {"token": JWT}
 
-            400 - malformed request body
-            401 - wrong password
-            500 - otherwise
+          400 - malformed request body
+          401 - wrong password
+          500 - otherwise
         """
         body = validate_request_body(AdminLoginSchema, request.json)
         if isinstance(body, str):
@@ -80,13 +74,11 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     @app.route("/v1/register", methods=["POST"])
     @jwt_required
     def register() -> Tuple[Dict[str, str], int]:
-        """
-        Register a new administrator
+        """Register a new administrator.
 
         JWT is passed via
 
-        Parameters:
-
+        Arguments:
           POST Body:
 
           {

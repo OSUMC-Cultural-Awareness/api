@@ -1,6 +1,4 @@
-"""
-Main entry point for Flask app
-"""
+"""Main entry point for Flask app."""
 import os
 
 from flask_bcrypt import Bcrypt  # type: ignore

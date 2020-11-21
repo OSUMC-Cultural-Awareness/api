@@ -1,6 +1,4 @@
-"""
-Module for culture routes
-"""
+"""Module for culture routes."""
 import time
 from typing import Any, Dict, List, Tuple
 
@@ -13,11 +11,9 @@ from ..request_schemas import (CultureCreateSchema, CultureUpdateSchema,
 
 
 def culture_routes(app: Flask, db: MongoClient) -> None:
-    """
-    Adds Culture routes to Flask App
+    """Adds Culture routes to Flask App.
 
-    Parameters:
-
+    Arguments:
     app: Flask app
 
     db: MongoDB client
@@ -25,11 +21,9 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
     @app.route("/v1/culture")
     def cultures() -> Tuple[Dict[str, List[Dict[str, Any]]], int]:
-        """
-        Fetch a list of all culture groups in alphabetical order with their last modified timestamps
+        """Fetch a list of all culture groups in alphabetical order with their last modified timestamps.
 
         Returns:
-
           200 - list of the all the names of culture groups
           {
             "cultures": [
@@ -49,11 +43,9 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
     @app.route("/v1/culture/<name>")
     def culture(name: str) -> Tuple[Dict[str, Any], int]:
-        """
-        Fetch information about a specific Culture Group
+        """Fetch information about a specific Culture Group.
 
-        Parameters:
-
+        Arguments:
           group_name: name of Culture Group
 
         Returns:
@@ -71,11 +63,9 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
     @app.route("/v1/culture", methods=["POST"])
     @jwt_required
     def culture_create() -> Tuple[Dict[str, str], int]:
-        """
-        Create a Culture with information
+        """Create a Culture with information.
 
-        Parameters:
-
+        Arguments:
           POST Body:
 
           {
@@ -115,11 +105,9 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
     @app.route("/v1/culture/<name>", methods=["PUT"])
     @jwt_required
     def culture_update(name: str) -> Tuple[Dict[str, str], int]:
-        """
-        Update an existing Culture
+        """Update an existing Culture.
 
-        Parameters:
-
+        Arguments:
           PUT Body:
 
           {
@@ -166,11 +154,12 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
     @app.route("/v1/culture/<name>", methods=["DELETE"])
     @jwt_required
     def culture_delete(name: str) -> Tuple[Dict[str, str], int]:
-        """
-        Delete an existing Culture
+        """Delete an existing Culture.
+
+        Arguments:
+          name: name of culture to delete
 
         Returns:
-
           200 - culture deleted
 
           {"msg": "deleted CULTURE_GROUP"}
