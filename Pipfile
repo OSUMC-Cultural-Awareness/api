@@ -9,6 +9,8 @@ mongomock = "*"
 pylint = "*"
 mypy = "*"
 isort = "*"
+coverage = "*"
+coveralls = "*"
 
 [packages]
 flask = "*"

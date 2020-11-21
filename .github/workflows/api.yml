@@ -5,6 +5,8 @@ on: [push]
 jobs:
   CI:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v1
@@ -34,3 +36,8 @@ jobs:
       - name: Isort
         run: |
           pipenv run isort -c .
+
+      - name: Coverage
+        run: |
+          pipenv run coverage run -m pytest
+          pipenv run coveralls
