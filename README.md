@@ -1,6 +1,6 @@
 <!-- PROJECT LOGO -->
 <br />
-<p align="center">
+<div align="center">
   <img src="./public/osu-cse-logo.jpg" alt="Logo" width="580" height="80">
 
   <h3 align="center">OSUMC Cultural Awareness App</h3>
@@ -8,7 +8,9 @@
   <p align="center">
     This app is intended for health care professionals, to aid in their understanding of the cultural norms of their patients
   </p>
-</p>
+  <img src="https://github.com/freeman91/OSUMC-Cultural-Awareness-App/workflows/Frontend/badge.svg" />
+  <img src="https://github.com/freeman91/OSUMC-Cultural-Awareness-App/workflows/Api/badge.svg" />
+</div>
 
 <!-- TABLE OF CONTENTS -->
 
@@ -30,9 +32,9 @@ TODO
 
 ### Built With
 
-MongoDB  
-Python-Flask  
-Node  
+MongoDB
+Python-Flask
+Node
 React-Native
 
 <!-- GETTING STARTED -->
@@ -108,12 +110,7 @@ pipenv shell
 python -m pytest
 ```
 
-(optional)
-
 ```sh
-# Read Logs
-docker logs $(docker ps --filter name=backend_cultural-awareness --format "{{.ID}}")
-
 # all container logs
 docker-compose logs -f --tail=100
 
