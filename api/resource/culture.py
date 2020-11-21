@@ -176,9 +176,13 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
           {"msg": "deleted CULTURE_GROUP"}
 
           401 - not authorized
+          404 - unknown culture
           500 - otherwise
         """
         collection = db.cultures
+        if collection.find_one({"name": name}) is None:
+            return {"msg": f"Unknown culture `{name}`"}, 404
+
         result = collection.delete_one({"name": name})
         if result.deleted_count == 0:
             return {"msg": "Internal server error"}, 500
