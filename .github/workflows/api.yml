@@ -37,6 +37,10 @@ jobs:
         run: |
           pipenv run isort -c .
 
+      - name: Docstyle
+        run: |
+          pipenv run pydocstyle
+
       - name: Coverage
         run: |
           pipenv run coverage run -m pytest
