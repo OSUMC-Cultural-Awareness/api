@@ -6,7 +6,6 @@ import os
 import sys
 from flask_jwt_extended import create_access_token, JWTManager
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager, create_access_token
 
 sys.path.insert(0, "/appdata")
 
