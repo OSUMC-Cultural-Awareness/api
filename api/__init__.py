@@ -1,33 +1,27 @@
-"""
-Flask API for interacting with OSUMC-Cultural Awareness App
+"""Flask API for interacting with OSUMC-Cultural Awareness App.
 
 Routes Specified:
   https://docs.google.com/spreadsheets/d/19zLqvcoFI7Jm_y6nPPgcRmaBuPEkDKtgeiyozekbMoU/edit?usp=sharing
 """
-from typing import Any, Dict, List, Tuple, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from flask import Flask
-
 from pymongo import MongoClient  # type:ignore
 
 
 def create_app() -> Flask:
-    """
-    Construct Flask App with all Endpoints
+    """Construct Flask App with all Endpoints.
 
     Returns:
-
       Flask app
     """
     app = Flask(__name__)
 
     @app.route("/")
     def index() -> Dict[str, List[Dict[str, Any]]]:
-        """
-        Index that informs user about routes
+        """Index that informs user about routes.
 
         Returns:
-
           200 - JSON containing all routes
 
           {
@@ -53,9 +47,7 @@ def create_app() -> Flask:
 
     @app.route("/v1/health")
     def health():
-        """
-        Health route
-        """
+        """Health route."""
         return {"msg": "healthy"}
 
     return app

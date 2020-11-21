@@ -21,6 +21,12 @@ def test_create_culture(client):
     assert response.get_json()["specialized_insights"] == []
 
 
+def test_create_culture_invalid_400(client):
+    response = client.post("v1/culture", json={"names": "test",},)
+
+    assert response.status_code == 400
+
+
 def test_create_culture_duplicate(client):
     response = client.post("v1/culture", json={"name": "test",},)
 
@@ -43,12 +49,23 @@ def test_delete_culture(client):
     assert response.status_code == 200
 
 
+def test_delete_culture_invalid_DNE(client):
+    response = client.delete("v1/culture/test")
+    assert response.status_code == 404
+
+
 def test_get_culture(client):
     response = client.post("v1/culture", json={"name": "test",},)
 
     test = client.get("/v1/culture/test")
 
     assert test.get_json() == response.get_json()
+
+
+def test_get_culture_invalid_DNE(client):
+    test = client.get("/v1/culture/test1")
+
+    assert test.status_code == 404
 
 
 def test_update_culture(client):
@@ -81,3 +98,32 @@ def test_update_culture(client):
         "information": "some interesting information",
         "source": {"type": "link", "data": "http://www.randomeinformation.com"},
     }
+
+
+def test_update_culture_invalid_400(client):
+    response = client.post("v1/culture", json={"name": "test",},)
+    update_response = client.put("v1/culture/test", json={"names": "test",},)
+
+    update_response.status_code == 400
+
+
+def test_update_culture_create(client):
+    update_response = client.put(
+        "v1/culture/test",
+        json={
+            "name": "test",
+            "general_insights": [
+                {
+                    "summary": "summarizing text",
+                    "information": "some interesting information",
+                    "source": {
+                        "type": "link",
+                        "data": "http://www.randomeinformation.com",
+                    },
+                }
+            ],
+            "specialized_insights": {},
+        },
+    )
+
+    update_response.status_code == 201

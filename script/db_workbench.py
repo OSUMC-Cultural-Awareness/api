@@ -1,47 +1,42 @@
-"""
-Developer db functions
-"""
+"""Developer db functions."""
 
 import os
 import sys
-from flask_jwt_extended import create_access_token, JWTManager
+
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager, create_access_token
+
+from api import create_app
+from api.db_connection import connect
 
 sys.path.insert(0, "/appdata")
-
-from api.db_connection import connect
-from api import create_app
 
 
 # general functions
 def list_collections():
-    """
-    all collections in the db
-    """
+    """All collections in the db."""
     return db.list_collection_names()
 
 
 def print_all():
-    """
-    print cultures and admins
-    """
+    """Print cultures and admins."""
     print_cultures()
     print_admins()
 
 
 # culture functions
 def print_cultures():
-    """
-    print cultures
-    """
+    """Print cultures."""
     for culture in db.cultures.find():
         print(culture["name"])
     print(db.cultures.count_documents({}))
 
 
 def print_culture_general_insights(culture_name):
-    """
-    print given culture's general insights
+    """Print given culture's general insights.
+
+    Arguments:
+      culture_name: culture to print general insight for
     """
     culture = db.cultures.find_one({"name": culture_name})
     insights = culture["general_insights"]
@@ -50,48 +45,67 @@ def print_culture_general_insights(culture_name):
 
 
 def create_culture(value):
-    """
-    create a new culture
+    """Create a new culture.
+
+    Arguments:
+      value: value of Culture to insert directly into database.
+
+    Note:
+      Avoid this operation on a live database connected to users as errors
+      he could negatively affect their experience, instead use the Api.
     """
     return db.cultures.insert_one(value)
 
 
 def delete_culture(culture_id):
-    """
-    delete a culture
+    """Delete a culture.
+
+    Arguments:
+      culture_id: ID of culture to delete
+
+    Note:
+      Avoid this operation on a live database connected to users as errors
+      he could negatively affect their experience, instead use the Api.
     """
     return db.cultures.delete_one({"_id": culture_id})
 
 
 def delete_all_cultures():
-    """
-    delete all cultures
+    """Delete all cultures.
+
+    Note:
+      Avoid this operation on a live database connected to users as errors
+      he could negatively affect their experience, instead use the Api.
     """
     return db.cultures.delete_many({})
 
 
 def update_culture(value):
-    """
-    update the given culture
+    """Update the given culture.
+
+    Note:
+      Avoid this operation on a live database connected to users as errors
+      he could negatively affect their experience, instead use the Api.
+
+      This operation could also create a new culture if one with the provided "_id" doesn't exist.
     """
     return db.cultures.replace_one({"_id": value["_id"]}, value)
 
 
-# admin functions
-
-
 def print_admins():
-    """
-    print all admins
-    """
+    """Print all admins."""
     for admin in db.admins.find():
         print(admin["name"])
     print(db.admins.count_documents({}))
 
 
 def create_su_admin(name, email, password):
-    """
-    create a new super user admin
+    """Create a new super user admin.
+
+    Arguments:
+      name: name of Admin
+      email: email for Admin
+      password: password for Admin
     """
     return db.admins.insert_one(
         {
@@ -104,8 +118,12 @@ def create_su_admin(name, email, password):
 
 
 def create_admin(name, email, password):
-    """
-    create a non-super-user admin
+    """Create a non-super-user admin.
+
+    Arguments:
+      name: name of Admin
+      email: email for Admin
+      password: password for Admin
     """
     return db.admins.insert_one(
         {
@@ -118,39 +136,43 @@ def create_admin(name, email, password):
 
 
 def get_admin(name):
-    """
-    fetch admin with the given name
+    """Fetch admin with the given name.
+
+    Arguments:
+      name: name of admin to fetch
     """
     return db.admins.find_one({"name": name})
 
 
 def delete_admin(admin_id):
-    """
-    delete the given admin
+    """Delete the given admin.
+
+    Arguments:
+      admin_id: _id of admin to delete
     """
     return db.admins.delete_one({"_id": admin_id})
 
 
 def delete_all_admins():
-    """
-    delete all admins
+    """Delete all admins.
+
+    Note:
+      This will delete your Admin account as well and therefore would require using
+      the `create_admin` in order to recreate an account.
     """
     return db.admins.delete_many({})
 
 
 def update_admin(value):
-    """
-    update the given admin
-    """
+    """Update the given admin."""
     return db.admins.replace_one({"_id": value["_id"]}, value)
 
 
-# auth functions
-
-
 def create_token(email):
-    """
-    generate an access toekn
+    """Generate an access token.
+
+    Arguments:
+      email: email to use for the JSON Web Token
     """
     ret = ""
     with app.app_context():
@@ -164,8 +186,7 @@ if __name__ == "__main__":
     db = connect()
     app = create_app()
     app.config.update(
-        SECRET_KEY=os.getenv("SECRET_KEY"),
-        JWT_SECRET_KEY=os.getenv("JWT_SECRET_KEY"),
+        SECRET_KEY=os.getenv("SECRET_KEY"), JWT_SECRET_KEY=os.getenv("JWT_SECRET_KEY"),
     )
     jwt = JWTManager(app)
     bcrypt = Bcrypt(app)

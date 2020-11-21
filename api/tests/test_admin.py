@@ -34,11 +34,25 @@ def test_login(client):
     assert res.get_json()["token"] is not None
 
 
-def test_login_invalid(client):
+def test_login_invalid_bad_password(client):
     res = client.post(
         "/v1/login", json={"email": "admin@gmail.com", "password": "not-the-password"}
     )
     assert res.status_code == 401
+
+
+def test_login_invalid_bad_email(client):
+    res = client.post(
+        "/v1/login", json={"email": "admins@gmail.com", "password": "not-the-password"}
+    )
+    assert res.status_code == 401
+
+
+def test_login_invalid_400(client):
+    res = client.post(
+        "/v1/login", json={"email": "admin@gmail.com", "passwordss": "not-the-password"}
+    )
+    assert res.status_code == 400
 
 
 def test_invalid_jwt(client):
@@ -58,6 +72,32 @@ def test_create_admin(client):
     )
     assert res.status_code == 201
     assert res.get_json()["token"] is not None
+
+
+def test_create_admin_invalid_400(client):
+    res = client.post(
+        "/v1/register",
+        json={
+            "name": "tester",
+            "email": "tester@gmail.com",
+            "passwords": "password",
+            "password_confirmation": "password",
+        },
+    )
+    assert res.status_code == 400
+
+
+def test_create_admin_invalid_password_and_confirm_dont_match(client):
+    res = client.post(
+        "/v1/register",
+        json={
+            "name": "tester",
+            "email": "tester@gmail.com",
+            "password": "password-test",
+            "password_confirmation": "password",
+        },
+    )
+    assert res.status_code == 401
 
 
 def test_create_admin_duplicate(client):
@@ -96,6 +136,12 @@ def test_get_admin(client):
         "name": "admin",
         "email": "admin@gmail.com",
     }
+
+
+def test_get_admin_invalid_no_admin(client):
+    res = client.get("/v1/admin/admins@gmail.com")
+    assert res.get_json()["msg"] == "unknown admin `admins@gmail.com`"
+    assert res.status_code == 404
 
 
 def test_delete_admin(client):
@@ -137,3 +183,51 @@ def test_update_admin(client):
 
     res = client.get("/v1/admin")
     assert res.get_json() == {"admins": ["admin@gmail.com", "tester@gmail.com"]}
+
+
+def test_update_admin_invalid_400(client):
+    res = client.post(
+        "/v1/register",
+        json={
+            "name": "tester",
+            "email": "tester@gmail.com",
+            "password": "password",
+            "password_confirmation": "password",
+        },
+    )
+
+    res = client.put(
+        "/v1/admin/tester@gmail.com",
+        json={
+            "names": "tester-different-name",
+            "email": "tester@gmail.com",
+            "password": "password",
+            "password_confirmation": "password",
+        },
+    )
+
+    assert res.status_code == 400
+
+
+def test_update_admin_invalid_password_and_confirm_dont_match(client):
+    res = client.post(
+        "/v1/register",
+        json={
+            "name": "tester",
+            "email": "tester@gmail.com",
+            "password": "password",
+            "password_confirmation": "password",
+        },
+    )
+
+    res = client.put(
+        "/v1/admin/tester@gmail.com",
+        json={
+            "name": "tester-different-name",
+            "email": "tester@gmail.com",
+            "password": "passwords",
+            "password_confirmation": "password",
+        },
+    )
+
+    assert res.status_code == 401
