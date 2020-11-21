@@ -6,14 +6,10 @@ from typing import Any, Dict, List, Tuple
 
 from flask import Flask, request
 from flask_jwt_extended import jwt_required  # type: ignore
-
 from pymongo import MongoClient  # type:ignore
 
-from ..request_schemas import (
-    validate_request_body,
-    CultureCreateSchema,
-    CultureUpdateSchema,
-)
+from ..request_schemas import (CultureCreateSchema, CultureUpdateSchema,
+                               validate_request_body)
 
 
 def culture_routes(app: Flask, db: MongoClient) -> None:

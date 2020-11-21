@@ -6,21 +6,13 @@ from json import dumps
 from typing import Dict, Tuple
 
 from flask import Flask, request
-
 from flask_bcrypt import Bcrypt  # type: ignore
-from flask_jwt_extended import (  # type: ignore
-    JWTManager,
-    jwt_required,
-    create_access_token,
-)
-
+from flask_jwt_extended import JWTManager  # type: ignore
+from flask_jwt_extended import create_access_token, jwt_required
 from pymongo import MongoClient  # type: ignore
 
-from .request_schemas import (
-    validate_request_body,
-    AdminLoginSchema,
-    AdminRegisterSchema,
-)
+from .request_schemas import (AdminLoginSchema, AdminRegisterSchema,
+                              validate_request_body)
 
 
 def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
@@ -76,11 +68,14 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         if not bcrypt.check_password_hash(admin["password"], password):
             return {"msg": "Invalid username or password"}, 401
 
-        return {
-            "token": create_access_token(
-                identity=email, expires_delta=timedelta(days=1)
-            )
-        }, 200
+        return (
+            {
+                "token": create_access_token(
+                    identity=email, expires_delta=timedelta(days=1)
+                )
+            },
+            200,
+        )
 
     @app.route("/v1/register", methods=["POST"])
     @jwt_required
@@ -139,9 +134,12 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         del body["password"]
         body["_id"] = str(body["_id"])
 
-        return {
-            "user": dumps(body),
-            "token": create_access_token(
-                identity=body["email"], expires_delta=timedelta(days=1)
-            ),
-        }, 201
+        return (
+            {
+                "user": dumps(body),
+                "token": create_access_token(
+                    identity=body["email"], expires_delta=timedelta(days=1)
+                ),
+            },
+            201,
+        )

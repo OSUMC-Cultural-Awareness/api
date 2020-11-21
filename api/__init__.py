@@ -4,10 +4,9 @@ Flask API for interacting with OSUMC-Cultural Awareness App
 Routes Specified:
   https://docs.google.com/spreadsheets/d/19zLqvcoFI7Jm_y6nPPgcRmaBuPEkDKtgeiyozekbMoU/edit?usp=sharing
 """
-from typing import Any, Dict, List, Tuple, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from flask import Flask
-
 from pymongo import MongoClient  # type:ignore
 
 

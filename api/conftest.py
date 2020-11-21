@@ -3,7 +3,6 @@ Pytest setup
 """
 import mongomock  # type: ignore
 import pytest  # type: ignore
-
 from flask_bcrypt import Bcrypt  # type: ignore
 
 from . import create_app

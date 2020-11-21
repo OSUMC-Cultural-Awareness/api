@@ -1,22 +1,19 @@
 """
 Module for admin routes
 """
-from typing import Dict, List, Tuple
 from datetime import timedelta
+from typing import Dict, List, Tuple
+
 from flask import Flask, request
 from flask_bcrypt import Bcrypt  # type: ignore
-from flask_jwt_extended import (  # type: ignore
-    jwt_required,
-    create_access_token,
-)
-
+from flask_jwt_extended import create_access_token  # type: ignore
+from flask_jwt_extended import jwt_required
 from pymongo import MongoClient  # type:ignore
+
 from ..mailer import send_invite_email
-from ..request_schemas import (
-    validate_request_body,
-    AdminInviteSchema,
-    AdminUpdateSchema,
-)
+from ..request_schemas import (AdminInviteSchema, AdminUpdateSchema,
+                               validate_request_body)
+
 
 def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     """

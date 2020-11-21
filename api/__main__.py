@@ -11,7 +11,6 @@ from .auth import auth_routes
 from .resource.admin import admin_routes
 from .resource.culture import culture_routes
 
-
 db = db_connection.connect()
 app = create_app()
 CORS(app)

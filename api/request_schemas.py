@@ -2,7 +2,8 @@
 Module for request body schemas and validation function
 """
 from typing import Any, Dict, Union
-from marshmallow import Schema, fields, ValidationError
+
+from marshmallow import Schema, ValidationError, fields
 
 
 class InsightSchema(Schema):

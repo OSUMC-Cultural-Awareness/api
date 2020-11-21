@@ -4,13 +4,15 @@ Developer db functions
 
 import os
 import sys
-from flask_jwt_extended import create_access_token, JWTManager
+
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager, create_access_token
+
+from api import create_app
+from api.db_connection import connect
 
 sys.path.insert(0, "/appdata")
 
-from api.db_connection import connect
-from api import create_app
 
 
 # general functions

@@ -30,3 +30,7 @@ jobs:
       - name: Mypy
         run: |
           pipenv run mypy api
+
+      - name: Isort
+        run: |
+          pipenv run isort -c .
