@@ -1,0 +1,12 @@
+[run]
+branch = True
+source =
+    api
+
+[report]
+omit =
+    api/__main__.py
+    api/conftest.py
+    api/tests/test_admin.py
+    api/tests/test_app.py
+    api/tests/test_culture.py

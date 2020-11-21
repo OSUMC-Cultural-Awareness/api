@@ -5,6 +5,8 @@ on: [push]
 jobs:
   CI:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v1
@@ -15,7 +17,8 @@ jobs:
           python-version: 3.8
 
       - name: Install pipenv
-        uses: dschep/install-pipenv-action@v1
+        run: |
+          pip install pipenv
 
       - name: Test
         run: |
@@ -30,3 +33,16 @@ jobs:
       - name: Mypy
         run: |
           pipenv run mypy api
+
+      - name: Isort
+        run: |
+          pipenv run isort -c .
+
+      - name: Docstyle
+        run: |
+          pipenv run pydocstyle
+
+      - name: Coverage
+        run: |
+          pipenv run coverage run -m pytest
+          pipenv run coveralls
