@@ -10,7 +10,7 @@
   </p>
   <img src="https://github.com/freeman91/OSUMC-Cultural-Awareness-App/workflows/Frontend/badge.svg" alt="Frontend CI"/>
   <img src="https://github.com/freeman91/OSUMC-Cultural-Awareness-App/workflows/Api/badge.svg" alt="Api CI"/>
-  <img src="https://coveralls.io/repos/github/freeman91/OSUMC-Cultural-Awareness-App/badge.svg?branch=master" alt="Api Coverage"/>
+  <a href="https://coveralls.io/github/freeman91/OSUMC-Cultural-Awareness-App?branch=master"><img src="https://coveralls.io/repos/github/freeman91/OSUMC-Cultural-Awareness-App/badge.svg?branch=master" alt="Api Coverage"/> </a>
 </div>
 
 <!-- TABLE OF CONTENTS -->
