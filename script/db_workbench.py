@@ -9,8 +9,8 @@ from flask_bcrypt import Bcrypt
 
 sys.path.insert(0, "/appdata")
 
-from api import create_app
 from api.db_connection import connect
+from api import create_app
 
 
 # general functions
