@@ -11,7 +11,6 @@ from .resource.culture import culture_routes
 
 db = db_connection.connect()
 app = create_app()
-CORS(app)
 
 app.config.update(
     # EMAIL SETTINGS
@@ -23,10 +22,12 @@ app.config.update(
     SECRET_KEY=os.getenv("SECRET_KEY"),
 )
 
+CORS(app)
 bcrypt = Bcrypt(app)
-
-# Routes
 auth_routes(app, db, bcrypt)
 admin_routes(app, db, bcrypt)
 culture_routes(app, db)
-CORS(app)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
+    
