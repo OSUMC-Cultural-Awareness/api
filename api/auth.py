@@ -41,7 +41,14 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         Returns:
           200 - Oauth token
 
-          {"token": JWT}
+          {
+            "token": JWT,
+            "user": {
+              "name": "name",
+              "email": "test@gmail.com",
+              "superUser": false
+            }
+          }
 
           400 - malformed request body
           401 - wrong password
@@ -62,11 +69,15 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         if not bcrypt.check_password_hash(admin["password"], password):
             return {"msg": "Invalid username or password"}, 401
 
+        admin["_id"] = str(admin["_id"])
+        del admin["password"]
+
         return (
             {
                 "token": create_access_token(
                     identity=email, expires_delta=timedelta(days=1)
-                )
+                ),
+                "user": admin,
             },
             200,
         )
@@ -91,7 +102,14 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         Returns:
           200 - New admin created
 
-          {"token": JWT}
+          {
+            "token": JWT,
+            "user": {
+              "name": "name",
+              "email": "test@gmail.com",
+              "superUser": false
+            }
+          }
 
           400 - Malformed body
           401 - unauthorized
