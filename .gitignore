@@ -1,6 +1,6 @@
 .DS_Store
 settings.json
-.env
+.env*
 mongo-volume
 mongo-root-user.js
 shell.nix
