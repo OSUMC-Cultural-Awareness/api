@@ -38,7 +38,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
           500 - otherwise
         """
         collection = db.admins
-        admins = [admin["email"] for admin in collection.find().sort("email")]
+        admins = [{"email": admin["email"], "name": admin["name"], "superUser": admin["superUser"]} for admin in collection.find().sort("email")]
         return {"admins": admins}
 
     @app.route("/v1/admin/<email>")
