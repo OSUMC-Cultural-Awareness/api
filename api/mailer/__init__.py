@@ -5,6 +5,9 @@ import os
 from flask import Flask
 from flask_mail import Mail, Message  # type: ignore
 from jinja2 import Template
+from dotenv import load_dotenv
+
+load_dotenv()
 
 FRONTEND_IP = os.getenv("FRONTEND_IP")
 

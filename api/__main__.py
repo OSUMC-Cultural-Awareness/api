@@ -3,11 +3,14 @@ import os
 
 from flask_bcrypt import Bcrypt  # type: ignore
 from flask_cors import CORS  # type: ignore
+from dotenv import load_dotenv
 
 from . import create_app, db_connection
 from .auth import auth_routes
 from .resource.admin import admin_routes
 from .resource.culture import culture_routes
+
+load_dotenv()
 
 db = db_connection.connect()
 app = create_app()
