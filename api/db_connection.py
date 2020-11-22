@@ -10,6 +10,10 @@ PORT = os.getenv("MONGO_PORT")
 MONGO_INITDB_DATABASE = os.getenv("MONGO_INITDB_DATABASE")
 MONGO_INITDB_ROOT_USERNAME = os.getenv("MONGO_INITDB_ROOT_USERNAME")
 MONGO_INITDB_ROOT_PASSWORD = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
+FLASK_ENV = os.getenv("FLASK_ENV")
+
+if FLASK_ENV == "production":
+    DOMAIN = "localhost"
 
 
 def connect() -> MongoClient:
