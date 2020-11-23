@@ -27,7 +27,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     """
     jwt = JWTManager(app)
 
-    @app.route("/v1/login", methods=["POST"])
+    @app.route("/api/v1/login", methods=["POST"])
     def login() -> Tuple[Dict[str, str], int]:
         """Login a User.
 
@@ -71,7 +71,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
             200,
         )
 
-    @app.route("/v1/register", methods=["POST"])
+    @app.route("/api/v1/register", methods=["POST"])
     @jwt_required
     def register() -> Tuple[Dict[str, str], int]:
         """Register a new administrator.
