@@ -146,7 +146,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
         return (
             {
-                "user": dumps(body),
+                "user": body,
                 "token": create_access_token(
                     identity=body["email"], expires_delta=timedelta(days=1)
                 ),

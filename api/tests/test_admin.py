@@ -31,7 +31,14 @@ def test_login(client):
         "/v1/login", json={"email": "tester@gmail.com", "password": "password"}
     )
     assert res.status_code == 200
-    assert res.get_json()["token"] is not None
+    json = res.get_json()
+    assert json["token"] is not None
+    admin = json["user"]
+
+    assert admin["_id"] is not None
+
+    del admin["_id"]
+    assert admin == {"name": "tester", "email": "tester@gmail.com", "superUser": False}
 
 
 def test_login_invalid_bad_password(client):
@@ -71,7 +78,14 @@ def test_create_admin(client):
         },
     )
     assert res.status_code == 201
-    assert res.get_json()["token"] is not None
+    json = res.get_json()
+    assert json["token"] is not None
+
+    admin = json["user"]
+    assert admin["_id"] is not None
+    del admin["_id"]
+
+    assert admin == {"name": "tester", "email": "tester@gmail.com", "superUser": False}
 
 
 def test_create_admin_invalid_400(client):
