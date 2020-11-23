@@ -1,7 +1,6 @@
 """module for Authentication and Authorization Routes."""
 from datetime import timedelta
-from json import dumps
-from typing import Dict, Tuple
+from typing import Any, Dict, Tuple
 
 from flask import Flask, request
 from flask_bcrypt import Bcrypt  # type: ignore
@@ -84,7 +83,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
     @app.route("/v1/register", methods=["POST"])
     @jwt_required
-    def register() -> Tuple[Dict[str, str], int]:
+    def register() -> Tuple[Dict[str, Any], int]:
         """Register a new administrator.
 
         JWT is passed via
