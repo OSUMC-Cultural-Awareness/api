@@ -19,7 +19,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
     db: MongoDB client
     """
 
-    @app.route("/v1/culture")
+    @app.route("/api/v1/cultures")
     def cultures() -> Tuple[Dict[str, List[Dict[str, Any]]], int]:
         """Fetch a list of all culture groups in alphabetical order with their last modified timestamps.
 
@@ -41,7 +41,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         ]
         return {"cultures": cultures}, 200
 
-    @app.route("/v1/culture/<name>")
+    @app.route("/api/v1/cultures/<name>")
     def culture(name: str) -> Tuple[Dict[str, Any], int]:
         """Fetch information about a specific Culture Group.
 
@@ -60,7 +60,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         culture["_id"] = str(culture["_id"])
         return culture, 200
 
-    @app.route("/v1/culture", methods=["POST"])
+    @app.route("/api/v1/cultures", methods=["POST"])
     @jwt_required
     def culture_create() -> Tuple[Dict[str, str], int]:
         """Create a Culture with information.
@@ -102,7 +102,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
         body["_id"] = str(body["_id"])
         return body, 201
 
-    @app.route("/v1/culture/<name>", methods=["PUT"])
+    @app.route("/api/v1/cultures/<name>", methods=["PUT"])
     @jwt_required
     def culture_update(name: str) -> Tuple[Dict[str, str], int]:
         """Update an existing Culture.
@@ -151,7 +151,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
         return body, 200
 
-    @app.route("/v1/culture/<name>", methods=["DELETE"])
+    @app.route("/api/v1/cultures/<name>", methods=["DELETE"])
     @jwt_required
     def culture_delete(name: str) -> Tuple[Dict[str, str], int]:
         """Delete an existing Culture.
