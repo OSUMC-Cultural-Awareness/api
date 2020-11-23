@@ -17,35 +17,7 @@ def create_app() -> Flask:
     """
     app = Flask(__name__)
 
-    @app.route("/")
-    def index() -> Dict[str, List[Dict[str, Any]]]:
-        """Index that informs user about routes.
-
-        Returns:
-          200 - JSON containing all routes
-
-          {
-            "routes": [
-              {
-                "methods": [
-                  "POST",
-                  "OPTIONS"
-                ],
-                "url": "/v1/admin/invite"
-              },
-              ...
-            ]
-          }
-
-          500 - otherwise
-        """
-        response: Dict[str, List[Dict[str, Any]]] = {"routes": []}
-        for rule in app.url_map.iter_rules():
-            route = {"url": f"{rule.rule}", "methods": list(rule.methods)}
-            response["routes"].append(route)
-        return response
-
-    @app.route("/v1/health")
+    @app.route("/health")
     def health():
         """Health route."""
         return {"msg": "healthy"}
