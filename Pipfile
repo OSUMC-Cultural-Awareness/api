@@ -23,6 +23,8 @@ marshmallow = "*"
 flask-cors = "*"
 gunicorn = "*"
 python-dotenv = "*"
+werkzeug = "*"
+dnspython = "*"
 
 [requires]
 python_version = "3.8"

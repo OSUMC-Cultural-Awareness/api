@@ -1,6 +1,6 @@
 """Module for admin routes."""
 from datetime import timedelta
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 from flask import Flask, request
 from flask_bcrypt import Bcrypt  # type: ignore
@@ -24,9 +24,9 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
     bcrypt: Bcrypt handle
     """
 
-    @app.route("/v1/admin")
+    @app.route("/api/v1/admins")
     @jwt_required
-    def admins() -> Dict[str, List[str]]:
+    def admins() -> Dict[str, List[Dict[str, Union[str, bool]]]]:
         """List all admins.
 
         Returns:
@@ -38,10 +38,17 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
           500 - otherwise
         """
         collection = db.admins
-        admins = [admin["email"] for admin in collection.find().sort("email")]
+        admins = [
+            {
+                "email": admin["email"],
+                "name": admin["name"],
+                "superUser": admin["superUser"],
+            }
+            for admin in collection.find().sort("email")
+        ]
         return {"admins": admins}
 
-    @app.route("/v1/admin/<email>")
+    @app.route("/api/v1/admins/<email>")
     @jwt_required
     def admin(email: str) -> Tuple[Dict[str, str], int]:
         """Fetch information about an admin.
@@ -66,7 +73,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         del admin["_id"]
         return admin, 200
 
-    @app.route("/v1/admin/invite", methods=["POST"])
+    @app.route("/api/v1/admins/invite", methods=["POST"])
     @jwt_required
     def invite() -> Tuple[Dict[str, str], int]:
         """Invite admin via Email.
@@ -103,7 +110,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
         return {"msg": f"email sent to {email}"}, 200
 
-    @app.route("/v1/admin/<email>", methods=["PUT"])
+    @app.route("/api/v1/admins/<email>", methods=["PUT"])
     @jwt_required
     def admin_update(email: str) -> Tuple[Dict[str, str], int]:
         """Update Admin.
@@ -157,7 +164,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
         return {"msg": f"successfully updated admin <{email}>"}, 200
 
-    @app.route("/v1/admin/<email>", methods=["DELETE"])
+    @app.route("/api/v1/admins/<email>", methods=["DELETE"])
     @jwt_required
     def admin_delete(email: str) -> Tuple[Dict[str, str], int]:
         """Delete Admin.

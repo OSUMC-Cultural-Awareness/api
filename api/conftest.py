@@ -16,7 +16,7 @@ def login_admin(flask_client):
         flask_client: Flask test client
     """
     res = flask_client.post(
-        "/v1/login", json={"email": "admin@gmail.com", "password": "password"}
+        "/api/v1/login", json={"email": "admin@gmail.com", "password": "password"}
     )
 
     json = res.get_json()
@@ -44,6 +44,7 @@ def client():
             "name": "admin",
             "email": "admin@gmail.com",
             "password": bcrypt.generate_password_hash("password"),
+            "superUser": False,
         }
     )
 
