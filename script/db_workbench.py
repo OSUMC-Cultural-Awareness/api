@@ -12,7 +12,6 @@ from api import create_app
 from api.db_connection import connect
 
 
-
 # general functions
 def list_collections():
     """All collections in the db."""
