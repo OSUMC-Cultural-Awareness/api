@@ -1,6 +1,9 @@
 def test_list_admins(client):
     res = client.get("/api/v1/admins")
-    assert res.get_json()["admins"] == ["admin@gmail.com"]
+    print(res)
+    assert res.get_json()["admins"] == [
+        {"email": "admin@gmail.com", "name": "admin", "superUser": False}
+    ]
 
     res = client.post(
         "/api/v1/register",
@@ -13,7 +16,10 @@ def test_list_admins(client):
     )
 
     res = client.get("/api/v1/admins")
-    assert res.get_json()["admins"] == ["admin@gmail.com", "tester@gmail.com"]
+    assert res.get_json()["admins"] == [
+        {"email": "admin@gmail.com", "name": "admin", "superUser": False},
+        {"email": "tester@gmail.com", "name": "tester", "superUser": False},
+    ]
 
 
 def test_login(client):
@@ -201,7 +207,10 @@ def test_update_admin(client):
     assert res.get_json() == {"msg": "successfully updated admin <tester@gmail.com>"}
 
     res = client.get("/api/v1/admins")
-    assert res.get_json() == {"admins": ["admin@gmail.com", "tester@gmail.com"]}
+    assert res.get_json()["admins"] == [
+        {"email": "admin@gmail.com", "name": "admin", "superUser": False},
+        {"email": "tester@gmail.com", "name": "tester-different-name", "superUser": False},
+    ]
 
 
 def test_update_admin_invalid_400(client):

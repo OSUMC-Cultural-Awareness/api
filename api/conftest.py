@@ -44,6 +44,7 @@ def client():
             "name": "admin",
             "email": "admin@gmail.com",
             "password": bcrypt.generate_password_hash("password"),
+            "superUser": False,
         }
     )
 
