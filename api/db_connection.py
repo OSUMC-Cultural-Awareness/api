@@ -1,8 +1,9 @@
 """Module that handles MongoDB connection."""
 import os
+
+from dotenv import load_dotenv
 from pymongo import MongoClient  # type:ignore
 from pymongo.errors import ServerSelectionTimeoutError  # type:ignore
-from dotenv import load_dotenv
 
 load_dotenv()
 
