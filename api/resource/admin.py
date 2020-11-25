@@ -8,8 +8,8 @@ from flask_jwt_extended import create_access_token  # type: ignore
 from flask_jwt_extended import jwt_required
 from pymongo import MongoClient  # type:ignore
 
-from ..mailer import send_invite_email
-from ..request_schemas import (AdminInviteSchema, AdminUpdateSchema,
+from ..mailer import send_invite_email, send_recovery_email
+from ..request_schemas import (AdminEmailSchema, AdminUpdateSchema,
                                validate_request_body)
 
 
@@ -93,14 +93,14 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
           401 - bad auth token
           500 - otherwise
         """
-        body = validate_request_body(AdminInviteSchema, request.json)
+        body = validate_request_body(AdminEmailSchema, request.json)
         if isinstance(body, str):
             return {"msg": body}, 400
 
         email = body["email"]
-        if db.admins.find_one({"email": body["email"]}) is not None:
+        if db.admins.find_one({"email": email}) is not None:
             return (
-                {"msg": f"<{body['email']}>: duplicate"},
+                {"msg": f"<{email}>: duplicate"},
                 409,
             )
 
@@ -185,3 +185,39 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         if result.deleted_count == 0:
             return {"msg": "Internal server error"}, 500
         return {"msg": f"successfully deleted admin <{email}>"}, 200
+
+    @app.route("/api/v1/admins/recover", methods=["POST"])
+    def admin_recover() -> Tuple[Dict[str, str], int]:
+        """Recover admin password.
+
+        Arguments:
+            POST Body:
+              {
+                "email": "test@gmail.com"
+              }
+
+        Returns:
+          200 - admin email recover email sent
+
+          {"msg": "email sent to <EMAIL>"}
+
+          400 - bad request
+          404 - admin not found
+          500 - otherwise
+        """
+        body = validate_request_body(AdminEmailSchema, request.json)
+        if isinstance(body, str):
+            return {"msg": body}, 400
+
+        email = body["email"]
+
+        collection = db.admins
+        result = collection.find_one({"email": email})
+        if result is None:
+            return {"msg": f"unknown admin {email}"}, 404
+
+        token = create_access_token(identity=email, expires_delta=timedelta(days=1))
+
+        send_recovery_email(app, token, email)
+
+        return {"msg": f"email sent to {email}"}, 200
