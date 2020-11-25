@@ -26,6 +26,8 @@ def send_invite_email(app: Flask, token: str, email: str) -> None:
     msg.html = template.render(
         url=f"http://{FRONTEND_IP}/Register?token={token}",
         title="OSUMC Cultural Awareness App Admin Invitation Email",
+        link_caption="Click the following link to register for an admin account",
+        header="Join our Admin team",
         action="Register",
     )
 
@@ -47,8 +49,10 @@ def send_recovery_email(app: Flask, token: str, email: str) -> None:
     msg = Message("Account Recovery", sender="App Admin", recipients=[email])
 
     msg.html = template.render(
-        url=f"http://{FRONTEND_IP}/Recovery?token={token}?email={email}",
+        url=f"http://{FRONTEND_IP}/Recovery?token={token}&email={email}",
         title="OSUMC Cultural Awareness App Admin Recovery Email",
+        link_caption="Click the following link to recover your account",
+        header="Recover your Account",
         action="Recover Account",
     )
 
