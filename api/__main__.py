@@ -1,9 +1,9 @@
 """Main entry point for Flask app."""
 import os
 
+from dotenv import load_dotenv
 from flask_bcrypt import Bcrypt  # type: ignore
 from flask_cors import CORS  # type: ignore
-from dotenv import load_dotenv
 
 from . import create_app, db_connection
 from .auth import auth_routes
@@ -33,4 +33,3 @@ culture_routes(app, db)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
-    
