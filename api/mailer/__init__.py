@@ -47,7 +47,7 @@ def send_recovery_email(app: Flask, token: str, email: str) -> None:
     msg = Message("Account Recovery", sender="App Admin", recipients=[email])
 
     msg.html = template.render(
-        url=f"http://{FRONTEND_IP}/Recovery?token={token}",
+        url=f"http://{FRONTEND_IP}/Recovery?token={token}?email={email}",
         title="OSUMC Cultural Awareness App Admin Recovery Email",
         action="Recover Account",
     )
