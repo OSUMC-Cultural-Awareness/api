@@ -23,6 +23,33 @@ def send_invite_email(app: Flask, token: str, email: str) -> None:
 
     msg = Message("Account Activation", sender="App Admin", recipients=[f"{email}"],)
 
-    msg.html = template.render(url=f"http://{FRONTEND_IP}/Register?token={token}")
+    msg.html = template.render(
+        url=f"http://{FRONTEND_IP}/Register?token={token}",
+        title="OSUMC Cultural Awareness App Admin Invitation Email",
+        action="Register",
+    )
+
+    mail.send(msg)
+
+
+def send_recovery_email(app: Flask, token: str, email: str) -> None:
+    """Prepare the admin recovery email and send it.
+
+    Arguments:
+      app: the flask app
+      token: token created for the email
+      email: address the email is being sent to
+    """
+    mail = Mail(app)
+    with open("api/mailer/templates/invite.html", "r") as f:
+        template = Template(f.read())
+
+    msg = Message("Account Recovery", sender="App Admin", recipients=[email])
+
+    msg.html = template.render(
+        url=f"http://{FRONTEND_IP}/Recovery?token={token}",
+        title="OSUMC Cultural Awareness App Admin Recovery Email",
+        action="Recover Account",
+    )
 
     mail.send(msg)
