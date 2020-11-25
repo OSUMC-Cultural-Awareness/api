@@ -24,7 +24,7 @@ class InsightSchema(Schema):
 
 
 class CultureCreateSchema(Schema):
-    """POST /vi/culture.
+    """POST /api/v1/cultures.
 
     Format:
     {
@@ -36,7 +36,7 @@ class CultureCreateSchema(Schema):
 
 
 class CultureUpdateSchema(Schema):
-    """PUT /v1/culture/<name>.
+    """PUT /api/v1/cultures/<name>.
 
     Format:
     {
@@ -55,7 +55,7 @@ class CultureUpdateSchema(Schema):
 
 
 class AdminLoginSchema(Schema):
-    """POST /v1/login.
+    """POST /api/v1/login.
 
     Format:
     {
@@ -69,7 +69,7 @@ class AdminLoginSchema(Schema):
 
 
 class AdminRegisterSchema(Schema):
-    """POST /v1/register.
+    """POST /api/v1/register.
 
     Format:
     {
@@ -86,8 +86,8 @@ class AdminRegisterSchema(Schema):
     password_confirmation = fields.String(required=True)
 
 
-class AdminInviteSchema(Schema):
-    """POST /v1/admin/invite.
+class AdminEmailSchema(Schema):
+    """POST /api/v1/admins/invite and /api/v1/admins/recover.
 
     Format:
     {
@@ -99,7 +99,7 @@ class AdminInviteSchema(Schema):
 
 
 class AdminUpdateSchema(Schema):
-    """PUT /v1/admin/<email>.
+    """PUT /api/v1/admins/<email>.
 
     Format:
     {
