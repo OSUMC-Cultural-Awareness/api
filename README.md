@@ -66,18 +66,17 @@ git clone https://github.com/freeman91/OSUMC-Cultural-Awareness-App.git
 ```sh
 FLASK_ENV=development
 FLASK_APP=api/__main__.py
-MONGO_URI=mongodb://localhost:27017/
+FRONTEND_URL=http://localhost:19006/
+MONGO_URI=mongodb+srv://ec2-user:<password>@data-cluster.tjzlp.mongodb.net/database?retryWrites=true&w=majority
 MONGO_INITDB_DATABASE=database
-MONGO_INITDB_ROOT_USERNAME=user
-MONGO_INITDB_ROOT_PASSWORD=password
+MONGO_INITDB_ROOT_USERNAME=admin
+MONGO_INITDB_ROOT_PASSWORD=<password>
 MONGO_IP=172.19.199.3
 MONGO_PORT=27017
-
 # SECRET_KEY randomly generate, MUST be secure
 SECRET_KEY=this-is-a-secret-key-keep-it-secret
-
 GMAIL_ADDRESS=osumc.cultural.awareness@gmail.com
-GMAIL_PASSWORD=password
+GMAIL_PASSWORD=<password>
 ```
 
 3. Install NPM packages
