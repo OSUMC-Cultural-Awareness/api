@@ -6,7 +6,6 @@ mongo-root-user.js
 shell.nix
 .envrc
 env.json
-envs
 .vscode
 
 .idea
