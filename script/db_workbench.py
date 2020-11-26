@@ -148,7 +148,7 @@ def delete_admin(admin):
     """Delete the given admin.
 
     Arguments:
-      admin_id: _id of admin to delete
+      admin: admin to delete
     """
     return db.admins.delete_one(admin)
 
