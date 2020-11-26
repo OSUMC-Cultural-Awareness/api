@@ -3,25 +3,23 @@ from datetime import timedelta
 from typing import Dict, List, Tuple, Union
 
 from flask import Flask, request
-from flask_bcrypt import Bcrypt  # type: ignore
 from flask_jwt_extended import create_access_token  # type: ignore
 from flask_jwt_extended import jwt_required
 from pymongo import MongoClient  # type:ignore
+from werkzeug.security import generate_password_hash
 
 from ..mailer import send_invite_email, send_recovery_email
 from ..request_schemas import (AdminEmailSchema, AdminUpdateSchema,
                                validate_request_body)
 
 
-def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
+def admin_routes(app: Flask, db: MongoClient) -> None:
     """Adds Admin routes to Flask App.
 
     Arguments:
     app: Flask app
 
     db: MongoDB client
-
-    bcrypt: Bcrypt handle
     """
 
     @app.route("/api/v1/admins")
@@ -148,7 +146,7 @@ def admin_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
                     401,
                 )
             del body["password_confirmation"]
-            body["password"] = bcrypt.generate_password_hash(body["password"])
+            body["password"] = generate_password_hash(body["password"])
         else:
             body["password"] = admin["password"]
 

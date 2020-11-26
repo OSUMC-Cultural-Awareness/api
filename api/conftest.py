@@ -1,7 +1,7 @@
 """Pytest setup."""
 import mongomock  # type: ignore
 import pytest  # type: ignore
-from flask_bcrypt import Bcrypt  # type: ignore
+from werkzeug.security import generate_password_hash
 
 from . import create_app
 from .auth import auth_routes
@@ -31,10 +31,9 @@ def client():
     db = mongomock.MongoClient().db
     app = create_app()
     app.config["SECRET_KEY"] = "testing"
-    bcrypt = Bcrypt(app)
 
-    auth_routes(app, db, bcrypt)
-    admin_routes(app, db, bcrypt)
+    auth_routes(app, db)
+    admin_routes(app, db)
     culture_routes(app, db)
     app.config["TESTING"] = True
 
@@ -43,7 +42,7 @@ def client():
         {
             "name": "admin",
             "email": "admin@gmail.com",
-            "password": bcrypt.generate_password_hash("password"),
+            "password": generate_password_hash("password"),
             "superUser": False,
         }
     )

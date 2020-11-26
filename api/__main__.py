@@ -2,7 +2,6 @@
 import os
 
 from dotenv import load_dotenv
-from flask_bcrypt import Bcrypt  # type: ignore
 from flask_cors import CORS  # type: ignore
 
 from . import create_app, db_connection
@@ -26,9 +25,8 @@ app.config.update(
 )
 
 CORS(app)
-bcrypt = Bcrypt(app)
-auth_routes(app, db, bcrypt)
-admin_routes(app, db, bcrypt)
+auth_routes(app, db)
+admin_routes(app, db)
 culture_routes(app, db)
 
 if __name__ == "__main__":

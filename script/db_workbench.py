@@ -3,8 +3,8 @@
 import os
 import sys
 
-from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token
+from werkzeug.security import generate_password_hash
 
 sys.path.insert(0, "/appdata")
 
@@ -111,7 +111,7 @@ def create_su_admin(name, email, password):
         {
             "name": name,
             "email": email,
-            "password": bcrypt.generate_password_hash(password),
+            "password": generate_password_hash(password),
             "superUser": True,
         }
     )
@@ -129,7 +129,7 @@ def create_admin(name, email, password):
         {
             "name": name,
             "email": email,
-            "password": bcrypt.generate_password_hash(password),
+            "password": generate_password_hash(password),
             "superUser": False,
         }
     )
@@ -189,4 +189,3 @@ if __name__ == "__main__":
         SECRET_KEY=os.getenv("SECRET_KEY"), JWT_SECRET_KEY=os.getenv("JWT_SECRET_KEY"),
     )
     jwt = JWTManager(app)
-    bcrypt = Bcrypt(app)
