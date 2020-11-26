@@ -1,0 +1,12 @@
+[Unit]
+Description=Cultural Awareness API
+After=network.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user/OSUMC-Cultural-Awareness-App
+ExecStart=/usr/local/bin/gunicorn --workers 2 --bind unix:gunicorn.sock -t 600 "api.__main__:app"
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
