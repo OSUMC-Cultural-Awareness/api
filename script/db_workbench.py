@@ -144,13 +144,13 @@ def get_admin(name):
     return db.admins.find_one({"name": name})
 
 
-def delete_admin(admin_id):
+def delete_admin(admin):
     """Delete the given admin.
 
     Arguments:
       admin_id: _id of admin to delete
     """
-    return db.admins.delete_one({"_id": admin_id})
+    return db.admins.delete_one(admin)
 
 
 def delete_all_admins():
@@ -163,9 +163,9 @@ def delete_all_admins():
     return db.admins.delete_many({})
 
 
-def update_admin(value):
+def update_admin(admin):
     """Update the given admin."""
-    return db.admins.replace_one({"_id": value["_id"]}, value)
+    return db.admins.replace_one({"_id": admin["_id"]}, admin)
 
 
 def create_token(email):
