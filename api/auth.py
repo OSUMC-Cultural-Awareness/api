@@ -6,7 +6,7 @@ from flask import Flask, request
 from flask_jwt_extended import JWTManager  # type: ignore
 from flask_jwt_extended import create_access_token, jwt_required
 from pymongo import MongoClient  # type: ignore
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from .request_schemas import (AdminLoginSchema, AdminRegisterSchema,
                               validate_request_body)
