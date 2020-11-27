@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=ec2-user
 WorkingDirectory=/home/ec2-user/OSUMC-Cultural-Awareness-App
-ExecStart=/usr/local/bin/gunicorn --workers 2 --bind unix:gunicorn.sock -t 600 "api.__main__:app"
+ExecStart=/home/ec2-user/.local/bin/pipenv /home/ec2-user/.local/share/virtualenvs/OSUMC-Cultural-Awareness-App-mBoCDs6Z/bin/gunicorn --workers 2 --bind unix:gunicorn.sock -t 600 "api.__main__:app"
 Restart=always
 
 [Install]
