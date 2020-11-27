@@ -2,11 +2,14 @@
 
 import os
 
+from dotenv import load_dotenv
 from flask import Flask
 from flask_mail import Mail, Message  # type: ignore
 from jinja2 import Template
 
-FRONTEND_IP = os.getenv("FRONTEND_IP")
+load_dotenv()
+
+FRONTEND_URL = os.getenv("FRONTEND_URL")
 
 
 def send_invite_email(app: Flask, token: str, email: str) -> None:
@@ -24,7 +27,7 @@ def send_invite_email(app: Flask, token: str, email: str) -> None:
     msg = Message("Account Activation", sender="App Admin", recipients=[f"{email}"],)
 
     msg.html = template.render(
-        url=f"http://{FRONTEND_IP}/Register?token={token}",
+        url=f"{FRONTEND_URL}/Register?token={token}",
         title="OSUMC Cultural Awareness App Admin Invitation Email",
         link_caption="Click the following link to register for an admin account",
         header="Join our Admin team",
@@ -49,7 +52,7 @@ def send_recovery_email(app: Flask, token: str, email: str) -> None:
     msg = Message("Account Recovery", sender="App Admin", recipients=[email])
 
     msg.html = template.render(
-        url=f"http://{FRONTEND_IP}/Recovery?token={token}&email={email}",
+        url=f"{FRONTEND_URL}/Recovery?token={token}&email={email}",
         title="OSUMC Cultural Awareness App Admin Recovery Email",
         link_caption="Click the following link to recover your account",
         header="Recover your Account",

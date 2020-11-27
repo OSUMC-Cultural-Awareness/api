@@ -1,7 +1,7 @@
 """Main entry point for Flask app."""
 import os
 
-from flask_bcrypt import Bcrypt  # type: ignore
+from dotenv import load_dotenv
 from flask_cors import CORS  # type: ignore
 
 from . import create_app, db_connection
@@ -9,9 +9,10 @@ from .auth import auth_routes
 from .resource.admin import admin_routes
 from .resource.culture import culture_routes
 
+load_dotenv()
+
 db = db_connection.connect()
 app = create_app()
-CORS(app)
 
 app.config.update(
     # EMAIL SETTINGS
@@ -23,10 +24,10 @@ app.config.update(
     SECRET_KEY=os.getenv("SECRET_KEY"),
 )
 
-bcrypt = Bcrypt(app)
-
-# Routes
-auth_routes(app, db, bcrypt)
-admin_routes(app, db, bcrypt)
-culture_routes(app, db)
 CORS(app)
+auth_routes(app, db)
+admin_routes(app, db)
+culture_routes(app, db)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')

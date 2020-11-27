@@ -3,8 +3,8 @@
 import os
 import sys
 
-from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token
+from werkzeug.security import generate_password_hash
 
 sys.path.insert(0, "/appdata")
 
@@ -111,7 +111,7 @@ def create_su_admin(name, email, password):
         {
             "name": name,
             "email": email,
-            "password": bcrypt.generate_password_hash(password),
+            "password": generate_password_hash(password),
             "superUser": True,
         }
     )
@@ -129,7 +129,7 @@ def create_admin(name, email, password):
         {
             "name": name,
             "email": email,
-            "password": bcrypt.generate_password_hash(password),
+            "password": generate_password_hash(password),
             "superUser": False,
         }
     )
@@ -144,13 +144,13 @@ def get_admin(name):
     return db.admins.find_one({"name": name})
 
 
-def delete_admin(admin_id):
+def delete_admin(email):
     """Delete the given admin.
 
     Arguments:
-      admin_id: _id of admin to delete
+      email: email of admin to delete
     """
-    return db.admins.delete_one({"_id": admin_id})
+    return db.admins.delete_one({"email": email})
 
 
 def delete_all_admins():
@@ -163,9 +163,9 @@ def delete_all_admins():
     return db.admins.delete_many({})
 
 
-def update_admin(value):
+def update_admin(admin):
     """Update the given admin."""
-    return db.admins.replace_one({"_id": value["_id"]}, value)
+    return db.admins.replace_one({"_id": admin["_id"]}, admin)
 
 
 def create_token(email):
@@ -189,4 +189,3 @@ if __name__ == "__main__":
         SECRET_KEY=os.getenv("SECRET_KEY"), JWT_SECRET_KEY=os.getenv("JWT_SECRET_KEY"),
     )
     jwt = JWTManager(app)
-    bcrypt = Bcrypt(app)

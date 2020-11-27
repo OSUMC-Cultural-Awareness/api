@@ -3,16 +3,16 @@ from datetime import timedelta
 from typing import Any, Dict, Tuple
 
 from flask import Flask, request
-from flask_bcrypt import Bcrypt  # type: ignore
 from flask_jwt_extended import JWTManager  # type: ignore
 from flask_jwt_extended import create_access_token, jwt_required
 from pymongo import MongoClient  # type: ignore
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from .request_schemas import (AdminLoginSchema, AdminRegisterSchema,
                               validate_request_body)
 
 
-def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
+def auth_routes(app: Flask, db: MongoClient) -> None:
     """Setup JWT Authentication via flask_jwt_extended and Login and Register route.
 
     Docs: https://flask-jwt-extended.readthedocs.io/en/latest/basic_usage/
@@ -22,7 +22,6 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
 
         db: MongoDB client
 
-        bcrypt: Bcrypt handle
     """
     jwt = JWTManager(app)
 
@@ -65,7 +64,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
         if not admin:
             return {"msg": "Invalid username or password"}, 401
 
-        if not bcrypt.check_password_hash(admin["password"], password):
+        if not check_password_hash(admin["password"], password):
             return {"msg": "Invalid username or password"}, 401
 
         admin["_id"] = str(admin["_id"])
@@ -133,7 +132,7 @@ def auth_routes(app: Flask, db: MongoClient, bcrypt: Bcrypt) -> None:
                 409,
             )
 
-        body["password"] = bcrypt.generate_password_hash(body["password"])
+        body["password"] = generate_password_hash(body["password"])
         body["superUser"] = False
 
         result = db.admins.insert_one(body)

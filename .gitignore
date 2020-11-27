@@ -5,6 +5,7 @@ mongo-volume
 mongo-root-user.js
 shell.nix
 .envrc
+env.json
 .vscode
 
 .idea

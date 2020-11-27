@@ -1,16 +1,19 @@
 """Module that handles MongoDB connection."""
-
 import os
 
+from dotenv import load_dotenv
 from pymongo import MongoClient  # type:ignore
 from pymongo.errors import ServerSelectionTimeoutError  # type:ignore
 
+load_dotenv()
+
+FLASK_ENV = os.getenv("FLASK_ENV")
 DOMAIN = os.getenv("MONGO_IP")
 PORT = os.getenv("MONGO_PORT")
 MONGO_INITDB_DATABASE = os.getenv("MONGO_INITDB_DATABASE")
 MONGO_INITDB_ROOT_USERNAME = os.getenv("MONGO_INITDB_ROOT_USERNAME")
 MONGO_INITDB_ROOT_PASSWORD = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
-
+MONGO_URI = os.getenv("MONGO_URI")
 
 def connect() -> MongoClient:
     """Establishes a connection to the database.
@@ -30,12 +33,16 @@ def connect() -> MongoClient:
     """
     try:
         # try to instantiate a client instance
-        client = MongoClient(
-            host=[DOMAIN + ":" + PORT],  # type: ignore
-            serverSelectionTimeoutMS=5000,  # 3 second timeout
-            username=MONGO_INITDB_ROOT_USERNAME,
-            password=MONGO_INITDB_ROOT_PASSWORD,
-        )
+        client = None
+        if FLASK_ENV == "development":
+            client = MongoClient(
+                host=[DOMAIN + ":" + PORT],  # type: ignore
+                serverSelectionTimeoutMS=5000,  # 5 second timeout
+                username=MONGO_INITDB_ROOT_USERNAME,
+                password=MONGO_INITDB_ROOT_PASSWORD,
+            )
+        else:
+            client = MongoClient(MONGO_URI)
 
         # print the version of MongoDB server if connection successful
         print("server version:", client.server_info()["version"])
@@ -44,6 +51,4 @@ def connect() -> MongoClient:
 
     except ServerSelectionTimeoutError as err:
         client = None
-
-        # catch pymongo.errors.ServerSelectionTimeoutError
         print("pymongo ERROR:", err)
