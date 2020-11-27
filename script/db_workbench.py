@@ -144,13 +144,13 @@ def get_admin(name):
     return db.admins.find_one({"name": name})
 
 
-def delete_admin(admin):
+def delete_admin(email):
     """Delete the given admin.
 
     Arguments:
-      admin: admin to delete
+      email: email of admin to delete
     """
-    return db.admins.delete_one(admin)
+    return db.admins.delete_one({"email": email})
 
 
 def delete_all_admins():
