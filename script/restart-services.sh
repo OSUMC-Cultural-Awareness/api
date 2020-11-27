@@ -7,7 +7,7 @@ git fetch
 # change to master
 git pull origin deploy-script
 
-~/.local/bin/pipenv install
+/home/ec2-user/.local/bin/pipenv install
 
 sudo systemctl daemon-reload
 
