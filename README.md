@@ -98,8 +98,8 @@ docker-compose up -d --build
 # restore your local db from the backup file
 script/restore_dev_db.sh
 
-# start expo service [android simulator, ios simulator, web browser]
-expo start [-a, -i, -w]
+# start dev expo service
+yarn start
 ```
 
 testing
