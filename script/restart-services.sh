@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 
 
-ls
+cd OSUMC-Cultural-Awareness-App/
+git fetch
+git pull origin deploy-script
+
