@@ -37,7 +37,7 @@ def connect() -> MongoClient:
         if FLASK_ENV == "development":
             client = MongoClient(
                 host=[DOMAIN + ":" + PORT],  # type: ignore
-                serverSelectionTimeoutMS=5000,  # 3 second timeout
+                serverSelectionTimeoutMS=5000,  # 5 second timeout
                 username=MONGO_INITDB_ROOT_USERNAME,
                 password=MONGO_INITDB_ROOT_PASSWORD,
             )
