@@ -20,8 +20,7 @@ fi
 echo -e "${GREEN}Fetching latest master${NC}"
 cd OSUMC-Cultural-Awareness-App/
 git fetch
-# change to master
-git pull origin deploy-script
+git pull origin master
 
 echo -e "${GREEN}Installing python packages${NC}"
 /home/ec2-user/.local/bin/pipenv install
