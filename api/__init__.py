@@ -8,8 +8,8 @@ from typing import Any, Dict, List, Optional, Tuple
 from flask import Flask, request
 from pymongo import MongoClient  # type:ignore
 
-from .request_schemas import FeedbackSchema, validate_request_body
 from .mailer import send_feedback
+from .request_schemas import FeedbackSchema, validate_request_body
 
 
 def create_app() -> Flask:
@@ -56,4 +56,3 @@ def create_app() -> Flask:
         return {"msg": "feedback sent"}, 200
 
     return app
-

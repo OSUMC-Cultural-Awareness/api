@@ -9,7 +9,8 @@ from pymongo import MongoClient  # type:ignore
 from werkzeug.security import generate_password_hash
 
 from ..mailer import send_invite_email, send_recovery_email
-from ..request_schemas import AdminEmailSchema, AdminUpdateSchema, validate_request_body
+from ..request_schemas import (AdminEmailSchema, AdminUpdateSchema,
+                               validate_request_body)
 
 
 def admin_routes(app: Flask, db: MongoClient) -> None:

@@ -81,4 +81,3 @@ def send_feedback(app: Flask, feedback: str) -> None:
     except KeyError:
         print("$MAIL_USERNAME not configured")
         print(f'Feedback: "{feedback}"')
-
