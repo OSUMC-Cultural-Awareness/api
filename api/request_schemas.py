@@ -1,5 +1,5 @@
 """Module for request body schemas and validation function."""
-from typing import Any, Dict, Union
+from typing import Any, Dict, Optional, Union
 
 from marshmallow import Schema, ValidationError, fields
 
@@ -21,6 +21,35 @@ class InsightSchema(Schema):
     summary = fields.String(required=True)
     information = fields.String(required=True)
     source = fields.Dict(keys=fields.String(), values=fields.String(), required=True)
+
+
+def feedback_validator(feedback: str) -> Optional[ValidationError]:
+    """Feedback validator, checks if the feedback has 0 < x < 300 characters.
+
+    Arguments:
+      feedback: feedback to validate
+
+    Returns:
+      ValidationError or None - None meaning valid input
+    """
+    if len(feedback) == 0:
+        return ValidationError("Feedback is too short")
+    if len(feedback) > 300:
+        return ValidationError("Feedback is too long")
+
+    return None
+
+
+class FeedbackSchema(Schema):
+    """POST /api/v1/feedback.
+
+    Format:
+    {
+      "feedback": "..."
+    }
+    """
+
+    feedback = fields.String(validate=feedback_validator, required=True)
 
 
 class CultureCreateSchema(Schema):
