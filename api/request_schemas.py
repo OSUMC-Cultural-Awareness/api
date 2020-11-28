@@ -23,6 +23,30 @@ class InsightSchema(Schema):
     source = fields.Dict(keys=fields.String(), values=fields.String(), required=True)
 
 
+def feedback_validator(feedback: str) -> None:
+    """Feedback validator, checks if the feedback has 0 < x < 300 characters.
+
+    Arguments:
+      feedback: feedback to validate
+    """
+    if len(feedback) == 0:
+        return ValidationError("Feedback is too short")
+    if len(feedback) > 300:
+        return ValidationError("Feedback is too long")
+
+
+class FeedbackSchema(Schema):
+    """POST /api/v1/feedback.
+
+    Format:
+    {
+      "feedback": "..."
+    }
+    """
+
+    feedback = fields.String(validate=feedback_validator, required=True)
+
+
 class CultureCreateSchema(Schema):
     """POST /api/v1/cultures.
 

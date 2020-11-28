@@ -60,3 +60,25 @@ def send_recovery_email(app: Flask, token: str, email: str) -> None:
     )
 
     mail.send(msg)
+
+
+def send_feedback(app: Flask, feedback: str) -> None:
+    """Send feedback to $MAIL_USERNAME if not provided logs the feedback.
+
+    Arguments:
+      app: the flask app
+      feedback: feedback from user
+    """
+    mail = Mail(app)
+    try:
+        msg = Message(
+            "Feedback",
+            sender="User",
+            recipients=[app.config["MAIL_USERNAME"]],
+            body=feedback,
+        )
+        mail.send(msg)
+    except KeyError:
+        print("$MAIL_USERNAME not configured")
+        print(f'Feedback: "{feedback}"')
+
