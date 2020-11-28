@@ -7,8 +7,8 @@
 
 ## Script Descriptions
 
-- `backup_dev_db.sh`  
-  run `script/backup_dev_db.sh` to create a backup (`db-backup.bak`) of the database running in the mongo docker container
+- `backup_prod_db.sh`  
+  run `script/backup_prod_db.sh` to create a backup (`db-backup.bak`) of the mongo atlas cloud cluster
 
 - `restore_dev_db.sh`  
   run `script/restore_dev_db.sh` to restore the database running in the mongo container with a backup (`db-backup.bak`)
@@ -20,3 +20,13 @@
 - `db_workbench.py`  
   loaded by `pyshell_db.sh`.  
   Exposes an instance of the database and contains functions for common db operations
+
+- `deploy_production_backend.sh`
+  Manually deploy latest master branch to production the server
+  Executes `restart_services.sh` inside of the ec2 instance
+  Must pass this script ssh key for the server
+
+- `restart_services.sh`
+  Should only run on the backend production server
+  Pulls latest master branch, updates python dependencies, restarts gunicorn, nginx services
+  
