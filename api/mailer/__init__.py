@@ -27,7 +27,7 @@ def send_invite_email(app: Flask, token: str, email: str) -> None:
     msg = Message("Account Activation", sender="App Admin", recipients=[f"{email}"],)
 
     msg.html = template.render(
-        url=f"{FRONTEND_URL}/Register?token={token}",
+        url=f"{FRONTEND_URL}/register/{token}",
         title="OSUMC Cultural Awareness App Admin Invitation Email",
         link_caption="Click the following link to register for an admin account",
         header="Join our Admin team",
@@ -52,7 +52,7 @@ def send_recovery_email(app: Flask, token: str, email: str) -> None:
     msg = Message("Account Recovery", sender="App Admin", recipients=[email])
 
     msg.html = template.render(
-        url=f"{FRONTEND_URL}/Recovery?token={token}&email={email}",
+        url=f"{FRONTEND_URL}/recovery/{email}/{token}",
         title="OSUMC Cultural Awareness App Admin Recovery Email",
         link_caption="Click the following link to recover your account",
         header="Recover your Account",
@@ -60,3 +60,24 @@ def send_recovery_email(app: Flask, token: str, email: str) -> None:
     )
 
     mail.send(msg)
+
+
+def send_feedback(app: Flask, feedback: str) -> None:
+    """Send feedback to $MAIL_USERNAME if not provided logs the feedback.
+
+    Arguments:
+      app: the flask app
+      feedback: feedback from user
+    """
+    mail = Mail(app)
+    try:
+        msg = Message(
+            "Feedback",
+            sender="User",
+            recipients=[app.config["MAIL_USERNAME"]],
+            body=feedback,
+        )
+        mail.send(msg)
+    except KeyError:
+        print("$MAIL_USERNAME not configured")
+        print(f'Feedback: "{feedback}"')
