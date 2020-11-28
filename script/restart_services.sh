@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO
-# error checking on each command
-# how to pass ssh key to github actions
-
 set -e
 
 GREEN='\033[0;32m'
@@ -19,7 +15,6 @@ fi
 
 echo -e "${GREEN}Fetching latest master${NC}"
 cd OSUMC-Cultural-Awareness-App/
-git fetch
 git pull origin master
 
 echo -e "${GREEN}Installing python packages${NC}"
