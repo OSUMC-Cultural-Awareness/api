@@ -142,7 +142,7 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
             return {"msg": body}, 400
 
         body["modified"] = int(time.time())
-        result = db.cultures.replace_one({"name": name}, body)
+        result = db.cultures.replace_one({"name": name}, body, upsert=True)
 
         if result.matched_count == 0:
             return body, 201
