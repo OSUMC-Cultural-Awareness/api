@@ -8,8 +8,8 @@ from werkzeug.security import generate_password_hash
 
 sys.path.insert(0, "/appdata")
 
-from api import create_app
-from api.db_connection import connect
+from __init__ import create_app
+from db_connection import connect
 
 
 # general functions

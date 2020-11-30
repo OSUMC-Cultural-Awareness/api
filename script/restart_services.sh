@@ -14,7 +14,7 @@ if [ $1 == 0 ]
 fi
 
 echo -e "${GREEN}Fetching latest master${NC}"
-cd OSUMC-Cultural-Awareness-App/
+cd api/
 git pull origin master
 
 echo -e "${GREEN}Installing python packages${NC}"

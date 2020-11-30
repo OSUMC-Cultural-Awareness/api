@@ -21,14 +21,12 @@
 - [About the Project](#about-the-project)
   - [Tech Stack](#tech-stack)
   - [Backend Production Environment](#backend-production-environment)
-  - [Frontend Production Environment](#frontend-production-environment)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation & Configuration](#Installation-&-Configuration)
     - [Build Backend Containers](#build-backend-containers)
 - [Deployment](#deployment)
   - [Backend](#backend)
-  - [Frontend](#frontend)
 - [Contributors](#contributors)
 - [Acknowledgements](#acknowledgements)
 
@@ -39,9 +37,6 @@
 
 - MongoDB  
 - Python-Flask  
-- Node  
-- React-Native  
-
 
 ### Backend Production Environment
 Amazon Linux 2 free-tier image running gunicorn and nginx services. Contact @freeman91 for ssh credentials.  
@@ -49,9 +44,6 @@ Amazon Linux 2 free-tier image running gunicorn and nginx services. Contact @fre
 Using [NginX](https://nginx.org/en/) as a HTTP and reverse proxy server, routing HTTP and HTTPS traffic to gunicorn through a socket file.  
 Listening for http/s requests on www.osumc-cultural-awareness.com.  
 
-### Frontend Production Environment
-Utlizing [Github Pages](https://pages.github.com/) to deploy a web build of the React Native application.  
-[Live React Native App](https://freeman91.github.io/OSUMC-Cultural-Awareness-App/)
 
 ***
 
@@ -76,7 +68,7 @@ install the following packages
 
 ```sh
 FLASK_ENV=development
-FLASK_APP=api/__main__.py
+FLASK_APP=__main__.py
 FRONTEND_URL=http://localhost:19006/
 # MONGO_URI not required for the app in dev
 MONGO_URI=mongodb+srv://admin:<password>@data-cluster.tjzlp.mongodb.net/database?retryWrites=true&w=majority
@@ -91,13 +83,7 @@ GMAIL_ADDRESS=osumc.cultural.awareness@gmail.com
 GMAIL_PASSWORD=<password>
 ```
 
-3. Install yarn packages
-
-```sh
-yarn install
-```
-
-4. Build backend docker containers
+3. Build docker containers
 
 ```sh
 # build db and api containers
@@ -118,10 +104,6 @@ docker-compose down
 
 After building, api service is up and running on localhost:5000.
 
-5. Start Expo, React Native service 
-```sh
-yarn start
-```
 
 - run python tests
 
@@ -133,19 +115,12 @@ python -m pytest
 ***
 
 ## Deployment
-`.github/workflows/deploy.yml` is automatically deploying the frontend and the backend to their respective environments. If either of those fail, you may need to deploy manually.
-
-### Backend
+`.github/workflows/deploy.yml` is automatically deploying the frontend and the backend to their respective environments. If either of those fail, you may need to deploy manually.  
 This will deploy the latest master, if you want to deploy another branch, follow these [instructions](https://github.com/freeman91/OSUMC-Cultural-Awareness-App/blob/master/docs/deployment.md#deploy-manually).
 
 ```sh
 script/deploy_production_server.sh /path/to/key
 ```  
-
-### Frontend 
-```sh
-yarn deploy
-```
 
 ***
 
