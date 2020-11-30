@@ -3,13 +3,12 @@
 import os
 import sys
 
-from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash
 
 sys.path.insert(0, "/appdata")
 
-from __init__ import create_app
-from db_connection import connect
+from api.db_connection import connect
 
 
 # general functions
@@ -184,8 +183,3 @@ def create_token(email):
 if __name__ == "__main__":
     # instantiate db and app
     db = connect()
-    app = create_app()
-    app.config.update(
-        SECRET_KEY=os.getenv("SECRET_KEY"), JWT_SECRET_KEY=os.getenv("JWT_SECRET_KEY"),
-    )
-    jwt = JWTManager(app)

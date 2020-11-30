@@ -8,10 +8,9 @@
   <p align="center">
     This app is intended for health care professionals, to aid in their understanding of the cultural norms of their patients
   </p>
-  <img src="https://github.com/freeman91/OSUMC-Cultural-Awareness-App/workflows/Frontend/badge.svg" alt="Frontend CI"/>
-  <img src="https://github.com/freeman91/OSUMC-Cultural-Awareness-App/workflows/Api/badge.svg" alt="Api CI"/>
-  <img src="https://github.com/freeman91/OSUMC-Cultural-Awareness-App/workflows/Deploy/badge.svg" alt="Api CI"/>
-  <a href="https://coveralls.io/github/freeman91/OSUMC-Cultural-Awareness-App?branch=master"><img src="https://coveralls.io/repos/github/freeman91/OSUMC-Cultural-Awareness-App/badge.svg?branch=master" alt="Api Coverage"/> </a>
+  <img src="https://github.com/freeman91/api/workflows/Api/badge.svg" alt="Api CI"/>
+  <img src="https://github.com/freeman91/api/workflows/Deploy/badge.svg" alt="Deploy CI"/>
+  <a href="https://coveralls.io/github/freeman91/api?branch=main"><img src="https://coveralls.io/repos/github/freeman91/OSUMC-Cultural-Awareness-App/badge.svg?branch=main" alt="Api Coverage"/> </a>
 </div>
 
 <!-- TABLE OF CONTENTS -->
