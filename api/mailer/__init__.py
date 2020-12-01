@@ -24,7 +24,11 @@ def send_invite_email(app: Flask, token: str, email: str) -> None:
     with open("mailer/templates/invite.html", "r") as f:
         template = Template(f.read())
 
-    msg = Message("Account Activation", sender="App Admin", recipients=[f"{email}"],)
+    msg = Message(
+        "Account Activation",
+        sender="App Admin",
+        recipients=[f"{email}"],
+    )
 
     msg.html = template.render(
         url=f"{FRONTEND_URL}/register/{token}",

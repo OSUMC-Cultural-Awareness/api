@@ -15,6 +15,7 @@ MONGO_INITDB_ROOT_USERNAME = os.getenv("MONGO_INITDB_ROOT_USERNAME")
 MONGO_INITDB_ROOT_PASSWORD = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
 MONGO_URI = os.getenv("MONGO_URI")
 
+
 def connect() -> MongoClient:
     """Establishes a connection to the database.
 
@@ -46,7 +47,6 @@ def connect() -> MongoClient:
 
         # print the version of MongoDB server if connection successful
         print("server version:", client.server_info()["version"])
-
 
         return client[MONGO_INITDB_DATABASE]
 

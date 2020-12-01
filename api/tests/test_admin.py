@@ -206,7 +206,11 @@ def test_update_admin(client):
     res = client.get("/api/v1/admins")
     assert res.get_json()["admins"] == [
         {"email": "admin@gmail.com", "name": "admin", "superUser": False},
-        {"email": "tester@gmail.com", "name": "tester-different-name", "superUser": False},
+        {
+            "email": "tester@gmail.com",
+            "name": "tester-different-name",
+            "superUser": False,
+        },
     ]
 
 
@@ -232,4 +236,3 @@ def test_update_admin_invalid_400(client):
     )
 
     assert res.status_code == 400
-

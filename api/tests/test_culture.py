@@ -4,7 +4,12 @@ def test_list_cultures_empty(client):
 
 
 def test_list_cultures(client):
-    response = client.post("/api/v1/cultures", json={"name": "test",},)
+    response = client.post(
+        "/api/v1/cultures",
+        json={
+            "name": "test",
+        },
+    )
 
     response1 = client.get("/api/v1/cultures")
     assert response1.get_json() == {
@@ -13,7 +18,12 @@ def test_list_cultures(client):
 
 
 def test_create_culture(client):
-    response = client.post("/api/v1/cultures", json={"name": "test",},)
+    response = client.post(
+        "/api/v1/cultures",
+        json={
+            "name": "test",
+        },
+    )
 
     assert response.status_code == 201
     assert response.get_json()["name"] == "test"
@@ -22,23 +32,43 @@ def test_create_culture(client):
 
 
 def test_create_culture_invalid_400(client):
-    response = client.post("/api/v1/cultures", json={"names": "test",},)
+    response = client.post(
+        "/api/v1/cultures",
+        json={
+            "names": "test",
+        },
+    )
 
     assert response.status_code == 400
 
 
 def test_create_culture_duplicate(client):
-    response = client.post("/api/v1/cultures", json={"name": "test",},)
+    response = client.post(
+        "/api/v1/cultures",
+        json={
+            "name": "test",
+        },
+    )
 
     assert response.status_code == 201
 
-    response = client.post("/api/v1/cultures", json={"name": "test",},)
+    response = client.post(
+        "/api/v1/cultures",
+        json={
+            "name": "test",
+        },
+    )
 
     assert response.status_code == 409
 
 
 def test_delete_culture(client):
-    response = client.post("/api/v1/cultures", json={"name": "test",},)
+    response = client.post(
+        "/api/v1/cultures",
+        json={
+            "name": "test",
+        },
+    )
 
     response1 = client.get("/api/v1/cultures")
     assert response1.get_json() == {
@@ -55,7 +85,12 @@ def test_delete_culture_invalid_DNE(client):
 
 
 def test_get_culture(client):
-    response = client.post("/api/v1/cultures", json={"name": "test",},)
+    response = client.post(
+        "/api/v1/cultures",
+        json={
+            "name": "test",
+        },
+    )
 
     test = client.get("/api/v1/cultures/test")
 
@@ -69,7 +104,12 @@ def test_get_culture_invalid_DNE(client):
 
 
 def test_update_culture(client):
-    response = client.post("/api/v1/cultures", json={"name": "test",},)
+    response = client.post(
+        "/api/v1/cultures",
+        json={
+            "name": "test",
+        },
+    )
     response_json = response.get_json()
 
     update_response = client.put(
@@ -101,8 +141,18 @@ def test_update_culture(client):
 
 
 def test_update_culture_invalid_400(client):
-    response = client.post("/api/v1/cultures", json={"name": "test",},)
-    update_response = client.put("/api/v1/cultures/test", json={"names": "test",},)
+    response = client.post(
+        "/api/v1/cultures",
+        json={
+            "name": "test",
+        },
+    )
+    update_response = client.put(
+        "/api/v1/cultures/test",
+        json={
+            "names": "test",
+        },
+    )
 
     assert update_response.status_code == 400
 

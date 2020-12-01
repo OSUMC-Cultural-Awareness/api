@@ -135,6 +135,7 @@ class AdminUpdateSchema(Schema):
       "name": "name",
     }
     """
+
     name = fields.String()
 
 
