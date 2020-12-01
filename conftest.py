@@ -3,10 +3,10 @@ import mongomock  # type: ignore
 import pytest  # type: ignore
 from werkzeug.security import generate_password_hash
 
-from . import create_app
-from .auth import auth_routes
-from .resource.admin import admin_routes
-from .resource.culture import culture_routes
+from api import create_app
+from api.auth import auth_routes
+from api.resource.admin import admin_routes
+from api.resource.culture import culture_routes
 
 
 def login_admin(flask_client):

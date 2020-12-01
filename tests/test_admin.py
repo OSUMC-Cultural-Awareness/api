@@ -195,10 +195,7 @@ def test_update_admin(client):
     )
 
     res = client.put(
-        "/api/v1/admins/tester@gmail.com",
-        json={
-            "name": "tester-different-name",
-        },
+        "/api/v1/admins/tester@gmail.com", json={"name": "tester-different-name",},
     )
 
     assert res.get_json() == {"msg": "successfully updated admin <tester@gmail.com>"}
