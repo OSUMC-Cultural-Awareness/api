@@ -6,7 +6,6 @@ from flask import Flask, request
 from flask_jwt_extended import create_access_token  # type: ignore
 from flask_jwt_extended import jwt_required
 from pymongo import MongoClient  # type:ignore
-from werkzeug.security import generate_password_hash
 
 from ..mailer import send_invite_email, send_recovery_email
 from ..request_schemas import (AdminEmailSchema, AdminUpdateSchema,
@@ -137,9 +136,8 @@ def admin_routes(app: Flask, db: MongoClient) -> None:
         admin = db.admins.find_one({"email": email})
 
         if "name" not in body:
-            pass
-            # return nothing changes
-            
+            return {"msg": f"no changes to admin <{email}>"}, 200
+
         admin["name"] = body["name"]
         result = db.admins.replace_one({"email": email}, admin)
         if result.matched_count == 0 or result.modified_count == 0:
