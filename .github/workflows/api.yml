@@ -28,7 +28,7 @@ jobs:
       - name: Lint
         run: |
           # Fail Under 5 because Pylint is very pedantic
-          pipenv run pylint . --fail-under 5
+          pipenv run pylint api --fail-under 5
 
       - name: Mypy
         run: |
