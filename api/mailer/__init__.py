@@ -1,6 +1,7 @@
 """Contains functions that send emails."""
 
 import os
+import pathlib
 
 from dotenv import load_dotenv
 from flask import Flask
@@ -10,6 +11,7 @@ from jinja2 import Template
 load_dotenv()
 
 FRONTEND_URL = os.getenv("FRONTEND_URL")
+PATH = pathlib.Path(__file__).parent.absolute()
 
 
 def send_invite_email(app: Flask, token: str, email: str) -> None:
@@ -21,14 +23,10 @@ def send_invite_email(app: Flask, token: str, email: str) -> None:
       email: address the email is being sent to
     """
     mail = Mail(app)
-    with open("mailer/templates/invite.html", "r") as f:
+    with open(f"{PATH}/templates/invite.html", "r") as f:
         template = Template(f.read())
 
-    msg = Message(
-        "Account Activation",
-        sender="App Admin",
-        recipients=[f"{email}"],
-    )
+    msg = Message("Account Activation", sender="App Admin", recipients=[f"{email}"],)
 
     msg.html = template.render(
         url=f"{FRONTEND_URL}/register/{token}",
@@ -50,7 +48,7 @@ def send_recovery_email(app: Flask, token: str, email: str) -> None:
       email: address the email is being sent to
     """
     mail = Mail(app)
-    with open("mailer/templates/invite.html", "r") as f:
+    with open(f"{PATH}/templates/invite.html", "r") as f:
         template = Template(f.read())
 
     msg = Message("Account Recovery", sender="App Admin", recipients=[email])
