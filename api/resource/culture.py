@@ -21,7 +21,8 @@ def culture_routes(app: Flask, db: MongoClient) -> None:
 
     @app.route("/api/v1/cultures")
     def cultures() -> Tuple[Dict[str, List[Dict[str, Any]]], int]:
-        """Fetch a list of all culture groups in alphabetical order with their last modified timestamps.
+        """Fetch a list of all culture groups in alphabetical order
+            with their last modified timestamps.
 
         Returns:
           200 - list of the all the names of culture groups
