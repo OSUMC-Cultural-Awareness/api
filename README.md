@@ -115,7 +115,7 @@ python -m pytest
 
 ## Deployment
 `.github/workflows/deploy.yml` is automatically deploying the frontend and the backend to their respective environments. If either of those fail, you may need to deploy manually.  
-This will deploy the latest master, if you want to deploy another branch, follow these [instructions](https://github.com/freeman91/OSUMC-Cultural-Awareness-App/blob/master/docs/deployment.md#deploy-manually).
+This will deploy the latest main, if you want to deploy another branch, follow these [instructions](https://github.com/OSUMC-Cultural-Awareness/api/blob/main/docs/deployment.md#deploy-manually).
 
 ```sh
 script/deploy_production_server.sh /path/to/key

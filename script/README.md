@@ -22,11 +22,11 @@
   Exposes an instance of the database and contains functions for common db operations
 
 - `deploy_production_backend.sh`
-  Manually deploy latest master branch to production the server
+  Manually deploy latest main branch to production the server
   Executes `restart_services.sh` inside of the ec2 instance
   Must pass this script ssh key for the server
 
 - `restart_services.sh`
   Should only run on the backend production server
-  Pulls latest master branch, updates python dependencies, restarts gunicorn, nginx services
+  Pulls latest main branch, updates python dependencies, restarts gunicorn, nginx services
   

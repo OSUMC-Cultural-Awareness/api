@@ -13,9 +13,9 @@ if [ $1 == 0 ]
     exit 1
 fi
 
-echo -e "${GREEN}Fetching latest master${NC}"
+echo -e "${GREEN}Fetching latest main${NC}"
 cd api/
-git pull origin master
+git pull origin main
 
 echo -e "${GREEN}Installing python packages${NC}"
 /home/ec2-user/.local/bin/pipenv install
