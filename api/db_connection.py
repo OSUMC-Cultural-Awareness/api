@@ -47,7 +47,7 @@ def connect() -> MongoClient:
         # print the version of MongoDB server if connection successful
         print("server version:", client.server_info()["version"])
 
-        
+
         return client[MONGO_INITDB_DATABASE]
 
     except ServerSelectionTimeoutError as err:
