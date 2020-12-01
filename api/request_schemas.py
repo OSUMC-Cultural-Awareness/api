@@ -1,7 +1,7 @@
 """Module for request body schemas and validation function."""
 from typing import Any, Dict, Optional, Union
 
-from marshmallow import Schema, ValidationError, validate, fields
+from marshmallow import Schema, ValidationError, fields, validate
 
 
 class InsightSchema(Schema):
