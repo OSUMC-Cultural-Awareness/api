@@ -1,23 +1,18 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <img src="./public/osu-cse-logo.jpg" alt="Logo" width="580" height="80">
+  <h3 align="center">OSUMC Cultural Awareness App API service</h3>
+  <img src="https://github.com/OSUMC-Cultural-Awareness/api/workflows/Api/badge.svg" alt="Api CI"/>
+  <img src="https://github.com/OSUMC-Cultural-Awareness/api/workflows/Deploy/badge.svg" alt="Deploy CI"/>
+  <a href='https://coveralls.io/github/OSUMC-Cultural-Awareness/api?branch=main'><img src='https://coveralls.io/repos/github/OSUMC-Cultural-Awareness/api/badge.svg?branch=main' alt='Coverage Status' /></a>
 
-  <h3 align="center">OSUMC Cultural Awareness App</h3>
-
-  <p align="center">
-    This app is intended for health care professionals, to aid in their understanding of the cultural norms of their patients
-  </p>
-  <img src="https://github.com/OSUMC-Cultural-Awareness/api/workflows/api/badge.svg" alt="Api CI"/>
-  <img src="https://github.com/OSUMC-Cultural-Awareness/api/workflows/deploy/badge.svg" alt="Deploy CI"/>
-  <a href="https://coveralls.io/github/OSUMC-Cultural-Awareness/api?branch=main"><img src="https://coveralls.io/repos/github/freeman91/OSUMC-Cultural-Awareness-App/badge.svg?branch=main" alt="Api Coverage"/> </a>
 </div>
 
 <!-- TABLE OF CONTENTS -->
 
 ## Table of Contents
 
-- [About the Project](#about-the-project)
+- [About the API service](#about-the-api-service)
   - [Tech Stack](#tech-stack)
   - [Backend Production Environment](#backend-production-environment)
 - [Getting Started](#getting-started)
@@ -31,7 +26,7 @@
 
 ***
 
-## About The Project
+## About The API service
 ### Tech Stack
 
 - MongoDB  
@@ -115,7 +110,7 @@ python -m pytest
 
 ## Deployment
 `.github/workflows/deploy.yml` is automatically deploying the frontend and the backend to their respective environments. If either of those fail, you may need to deploy manually.  
-This will deploy the latest main, if you want to deploy another branch, follow these [instructions](https://github.com/OSUMC-Cultural-Awareness/api/blob/main/docs/deployment.md#deploy-manually).
+This will deploy the latest main, if you want to deploy another branch, follow these [instructions](https://github.com/OSUMC-Cultural-Awareness/docs/blob/main/setup/deployment.md#deploy-manually).
 
 ```sh
 script/deploy_production_server.sh /path/to/key
