@@ -7,7 +7,7 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 
-if [ $1 == 0 ]
+if [[ $1 == 0 ]]
   then
     echo -e "${RED}provide an ssh key as an argument${NC}"
     exit 1
