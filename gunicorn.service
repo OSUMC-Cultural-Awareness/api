@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=ec2-user
 WorkingDirectory=/home/ec2-user/api
-ExecStart=/home/ec2-user/.local/bin/pipenv /home/ec2-user/.local/share/virtualenvs/api-mBoCDs6Z/bin/gunicorn --workers 2 --bind unix:gunicorn.sock -t 600 "__main__:app"
+ExecStart=/home/ec2-user/.local/bin/pipenv run /home/ec2-user/.local/share/virtualenvs/api-tHwjNiCt/bin/gunicorn --workers 2 --bind unix:gunicorn.sock -t 600 "api.__main__:app"
 Restart=always
 
 [Install]
