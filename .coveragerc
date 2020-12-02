@@ -5,8 +5,5 @@ source =
 
 [report]
 omit =
-    __main__.py
-    conftest.py
-    tests/test_admin.py
-    tests/test_app.py
-    tests/test_culture.py
+    api/__main__.py
+    api/db_connection.py

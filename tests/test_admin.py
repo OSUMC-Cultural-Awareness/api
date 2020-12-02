@@ -195,10 +195,7 @@ def test_update_admin(client):
     )
 
     res = client.put(
-        "/api/v1/admins/tester@gmail.com",
-        json={
-            "name": "tester-different-name",
-        },
+        "/api/v1/admins/tester@gmail.com", json={"name": "tester-different-name",},
     )
 
     assert res.get_json() == {"msg": "successfully updated admin <tester@gmail.com>"}
@@ -235,4 +232,37 @@ def test_update_admin_invalid_400(client):
         },
     )
 
+    assert res.status_code == 400
+
+
+def test_send_invite_email(client):
+    res = client.post("/api/v1/admins/invite", json={"email": "test@gmail.com"})
+    assert res.status_code == 200
+    assert res.get_json() == {"msg": "email sent to test@gmail.com"}
+
+
+def test_send_invite_email_duplicate(client):
+    res = client.post("/api/v1/admins/invite", json={"email": "admin@gmail.com"})
+    assert res.status_code == 409
+
+    assert res.get_json() == {"msg": "<admin@gmail.com>: duplicate"}
+
+
+def test_send_invite_email_invalid(client):
+    res = client.post("/api/v1/admins/invite", json={"emails": "admin@gmail.com"})
+    assert res.status_code == 400
+
+
+def test_recover_email(client):
+    res = client.post("/api/v1/admins/recover", json={"email": "admin@gmail.com"})
+    assert res.status_code == 200
+
+
+def test_recover_email_unknown(client):
+    res = client.post("/api/v1/admins/recover", json={"email": "unknown@gmail.com"})
+    assert res.status_code == 404
+
+
+def test_recover_email_invalid(client):
+    res = client.post("/api/v1/admins/recover", json={"emails": "admin@gmail.com"})
     assert res.status_code == 400

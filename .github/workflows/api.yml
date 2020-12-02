@@ -1,6 +1,6 @@
 name: Api
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   CI:
