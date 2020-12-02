@@ -1,13 +1,14 @@
-<!-- Fill in Story number and OCA-?? -->
-Story: [story-number](https://5911-capstone.atlassian.net/browse/OCA-??)
+Resolves: <!-- Issue number -->
 
 ## Summary
+
 <!-- Summarize Changes -->
 
-## Screenshot(s)
-<!--- If applicable -->
+## Acceptance Criteria
 
+- [ ] X
+- [ ] Y
 
-
+<!-- Copy and paste from issue and add checkboxes -->
 
 <!--- Don't forget to request a reviewer -->
