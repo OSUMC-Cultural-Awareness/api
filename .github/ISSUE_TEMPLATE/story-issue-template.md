@@ -20,5 +20,4 @@ It should do X because of Y
 - Do X
 - Do Y
 
-<!-- Add "api" label -->
 <!-- Add to "Story Board" in Projects -->
