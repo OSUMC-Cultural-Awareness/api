@@ -55,6 +55,15 @@ docker-compose down
 pipenv run python -m pytest
 ```
 
+## Known dev error and workaround
+Immediatley after a fresh rebuild of containers it is common that the api service is not connected to mongo database and the frontend will throw an error.
+
+Workaround: 
+- add `print(db)` to `api/resource/culture.py` before line 38.
+- reload the web page
+- error should be gone
+- remove `print(db)` from culture.py and everything will work as expected
+
 ## Deployment
 `.github/workflows/deploy.yml` is automatically deploying the frontend and the backend to their respective environments. If the workflow fails, you may need to deploy manually.  
 The following command will deploy the latest main branch to the ec2 instance, if you want to deploy another branch, follow these [instructions](https://github.com/OSUMC-Cultural-Awareness/docs/blob/main/setup/deployment.md#deploy-manually).
